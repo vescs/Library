@@ -9,10 +9,12 @@ namespace Library.Core.Repositories
     public interface IBookRepository
     {
         Task AddAsync(Book book);
-        Task<IEnumerable<Book>> BrowseAsync(string name = "");
+        Task<IEnumerable<Book>> BrowseAsync(string title = "");
+        Task<IEnumerable<Book>> BrowseAuthorsAsync(string author = "");
+        Task<IEnumerable<Book>> BrowseHousesAsync(string house = "");
         Task DeleteAsync(Guid id);
         Task<Book> GetAsync(Guid id);
-        Task<Newspaper> GetAsync(string title);
+        Task<Book> GetAsync(string title);
         Task UpdateAsync(Book book);
     }
 }
