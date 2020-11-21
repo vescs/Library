@@ -13,6 +13,7 @@ namespace Library.Infrastructure.AutoMapper
             => new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Book, BookDTO>();
+                cfg.CreateMap<Newspaper, NewspaperDTO>();
             })
             .CreateMapper();
     }
