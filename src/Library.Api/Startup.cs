@@ -1,4 +1,8 @@
+using Library.Core.Repositories;
 using Library.Infrastructure.AutoMapper;
+using Library.Infrastructure.IServices;
+using Library.Infrastructure.Repositories;
+using Library.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +32,9 @@ namespace Library.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(AutoMapperConfiguration.Initialize());
+            services.AddScoped<IBookRepository, InMemoryBookRepository>();
+            services.AddScoped<IBookService, BookService>();
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.Formatting = Formatting.Indented);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
