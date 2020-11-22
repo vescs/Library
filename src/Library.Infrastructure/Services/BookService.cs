@@ -61,18 +61,30 @@ namespace Library.Infrastructure.Services
         public async Task<BookDTO> GetAsync(Guid id)
         {
             var book = await _bookRepository.GetAsync(id);
+            if (book == null)
+            {
+                throw new Exception($"Book with id {id} does not exist.");
+            }
             return _mapper.Map<BookDTO>(book);
         }
 
         public async Task<BookDTO> GetAsync(string title)
         {
             var book = await _bookRepository.GetAsync(title);
+            if (book == null)
+            {
+                throw new Exception($"Book with title '{title}' does not exist.");
+            }
             return _mapper.Map<BookDTO>(book);
         }
 
         public async Task UpdateAsync(Guid id, string title, string description)
         {
             var book = await _bookRepository.GetAsync(id);
+            if (book == null)
+            {
+                throw new Exception($"Book with id {id} does not exist.");
+            }
             if (!string.IsNullOrWhiteSpace(title))
             {
                 book.SetTitle(title);

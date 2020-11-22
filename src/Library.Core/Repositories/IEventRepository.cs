@@ -12,7 +12,7 @@ namespace Library.Core.Repositories
         Task<IEnumerable<Event>> BrowseAsync(string name = "");
         Task DeleteAsync(Guid id);
         Task<Event> GetAsync(Guid id);
-        Task<Newspaper> GetAsync(string name);
+        Task<Event> GetAsync(string name);
         Task UpdateAsync(Event @event);
     }
 }

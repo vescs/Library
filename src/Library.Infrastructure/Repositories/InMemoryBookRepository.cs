@@ -68,7 +68,7 @@ namespace Library.Infrastructure.Repositories
 
         public async Task<Book> GetAsync(string title)
         {
-            return await Task.FromResult(_books.SingleOrDefault(x => x.Title == title));
+            return await Task.FromResult(_books.SingleOrDefault(x => x.Title.ToLowerInvariant() == title.ToLowerInvariant()));
         }
 
         public async Task UpdateAsync(Book book)
