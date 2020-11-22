@@ -19,6 +19,7 @@ namespace Library.Core.Models
             SetTitle(title);
             SetDescription(description);
             SetReleaseDate(releaseDate);
+            SetType(type);
             CreatedAt = DateTime.UtcNow;
             Update();
         }

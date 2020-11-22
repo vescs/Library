@@ -52,9 +52,10 @@ namespace Library.Api
         {
             //repos
             builder.RegisterType<InMemoryBookRepository>().As<IBookRepository>().InstancePerLifetimeScope();
-
+            builder.RegisterType<InMemoryNewspaperRepository>().As<INewspaperRepository>().InstancePerLifetimeScope();
             //services
             builder.RegisterType<BookService>().As<IBookService>().InstancePerLifetimeScope();
+            builder.RegisterType<NewspaperService>().As<INewspaperService>().InstancePerLifetimeScope();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
