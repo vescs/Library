@@ -19,9 +19,9 @@ namespace Library.Infrastructure.Services
             _movieRepository = movieRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<MovieDTO>> BrowseAsync(string title = "")
+        public async Task<IEnumerable<MovieDTO>> BrowseAsync(string name = "")
         {
-            var movies = await _movieRepository.BrowseAsync(title);
+            var movies = await _movieRepository.BrowseAsync(name);
             return _mapper.Map<IEnumerable<MovieDTO>>(movies);
         }
 
