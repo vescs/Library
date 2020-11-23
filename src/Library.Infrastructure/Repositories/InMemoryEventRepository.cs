@@ -10,12 +10,7 @@ namespace Library.Infrastructure.Repositories
 {
     public class InMemoryEventRepository : IEventRepository
     {
-        private static ISet<Event> _events = new HashSet<Event>()
-        {
-            new Event(Guid.NewGuid(), "Name 1", "Description 1", DateTime.UtcNow, DateTime.UtcNow.AddDays(2)),
-            new Event(Guid.NewGuid(), "Name 2", "Description 2", DateTime.UtcNow, DateTime.UtcNow.AddDays(3)),
-            new Event(Guid.NewGuid(), "Name 3", "Description 3", DateTime.UtcNow, DateTime.UtcNow.AddDays(4)),
-        };
+        private static ISet<Event> _events = new HashSet<Event>();
         public async Task AddAsync(Event @event)
         {
             _events.Add(@event);

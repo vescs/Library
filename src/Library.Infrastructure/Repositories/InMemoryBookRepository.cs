@@ -10,12 +10,7 @@ namespace Library.Infrastructure.Repositories
 {
     public class InMemoryBookRepository : IBookRepository
     {
-        private static ISet<Book> _books = new HashSet<Book>()
-        {
-            new Book(Guid.NewGuid(), "Title 1", "Description 1", "Author 1", 100, "House 1", DateTime.UtcNow),
-            new Book(Guid.NewGuid(), "Title 2", "Description 2", "Author 2", 150, "House 1", DateTime.UtcNow.AddDays(-10)),
-            new Book(Guid.NewGuid(), "Title 3", "Description 3", "Author 3", 200, "House 2", DateTime.UtcNow.AddDays(-15))
-        };
+        private static ISet<Book> _books = new HashSet<Book>();
         public async Task AddAsync(Book book)
         {
             _books.Add(book);

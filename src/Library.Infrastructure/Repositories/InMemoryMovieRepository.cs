@@ -11,12 +11,7 @@ namespace Library.Infrastructure.Repositories
 {
     public class InMemoryMovieRepository : IMovieRepository
     {
-        private static ISet<Movie> _movies = new HashSet<Movie>()
-        {
-            new Movie(Guid.NewGuid(), "Title 1", "Description 1", "Director 1", 120, DateTime.UtcNow),
-            new Movie(Guid.NewGuid(), "Title 2", "Description 2", "Director 2", 130, DateTime.UtcNow),
-            new Movie(Guid.NewGuid(), "Title 3", "Description 3", "Director 3", 140, DateTime.UtcNow),
-        };
+        private static ISet<Movie> _movies = new HashSet<Movie>();
         public async Task AddAsync(Movie movie)
         {
             _movies.Add(movie);

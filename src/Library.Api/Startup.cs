@@ -4,6 +4,7 @@ using Library.Infrastructure.AutoMapper;
 using Library.Infrastructure.IServices;
 using Library.Infrastructure.Repositories;
 using Library.Infrastructure.Services;
+using Library.Infrastructure.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +61,7 @@ namespace Library.Api
             builder.RegisterType<NewspaperService>().As<INewspaperService>().InstancePerLifetimeScope();
             builder.RegisterType<EventService>().As<IEventService>().InstancePerLifetimeScope();
             builder.RegisterType<MovieService>().As<IMovieService>().InstancePerLifetimeScope();
+            builder.RegisterType<DataInitializer>().As<IDataInitializer>().InstancePerLifetimeScope();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -79,6 +81,17 @@ namespace Library.Api
             {
                 endpoints.MapControllers();
             });
+            SeedData(app);
+        }
+        private void SeedData(IApplicationBuilder app)
+        {
+            var seed = new SeedSettings();
+            Configuration.GetSection("seed").Bind(seed);
+            if (seed.Flag)
+            {
+                var initializer = app.ApplicationServices.GetService<IDataInitializer>();
+                initializer.SeedAsync();
+            }
         }
     }
 }

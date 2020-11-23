@@ -10,12 +10,7 @@ namespace Library.Infrastructure.Repositories
 {
     public class InMemoryNewspaperRepository : INewspaperRepository
     {
-        private static ISet<Newspaper> _newspapers = new HashSet<Newspaper>()
-        {
-            new Newspaper(Guid.NewGuid(), "Title 1", "Description 1", "Weekly", DateTime.UtcNow),
-            new Newspaper(Guid.NewGuid(), "Title 2", "Description 2", "Monthly", DateTime.UtcNow),
-            new Newspaper(Guid.NewGuid(), "Title 3", "Description 3", "Yearly", DateTime.UtcNow)
-        };
+        private static ISet<Newspaper> _newspapers = new HashSet<Newspaper>();
         public async Task AddAsync(Newspaper newspaper)
         {
             _newspapers.Add(newspaper);
