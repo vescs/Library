@@ -20,6 +20,7 @@ namespace Library.Core.Models
             SetTitle(title);
             SetDescription(description);
             SetLength(length);
+            SetDirector(director);
             SetPremiereDate(premiereDate);
             CreatedAt = DateTime.UtcNow;
             Update();
