@@ -5,6 +5,7 @@ using Library.Infrastructure.IServices;
 using Library.Infrastructure.Repositories;
 using Library.Infrastructure.Services;
 using Library.Infrastructure.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +13,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Library.Api
@@ -40,13 +43,30 @@ namespace Library.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //automapper
             services.AddSingleton(AutoMapperConfiguration.Initialize());
+            //formatting
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.Formatting = Formatting.Indented);
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Library.Api", Version = "v1" });
             });
+
+            //jwt
+            var jwtSettings = new JwtSettings();
+            Configuration.GetSection("jwt").Bind(jwtSettings);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+                            ValidIssuer = jwtSettings.Issuer,
+                            ValidateAudience = false
+                        };
+                    });
         }
         //Autofac
         public void ConfigureContainer(ContainerBuilder builder)
@@ -56,12 +76,16 @@ namespace Library.Api
             builder.RegisterType<InMemoryNewspaperRepository>().As<INewspaperRepository>().InstancePerLifetimeScope();
             builder.RegisterType<InMemoryEventRepository>().As<IEventRepository>().InstancePerLifetimeScope();
             builder.RegisterType<InMemoryMovieRepository>().As<IMovieRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<InMemoryUserRepository>().As<IUserRepository>().InstancePerLifetimeScope();
+
             //services
             builder.RegisterType<BookService>().As<IBookService>().InstancePerLifetimeScope();
             builder.RegisterType<NewspaperService>().As<INewspaperService>().InstancePerLifetimeScope();
             builder.RegisterType<EventService>().As<IEventService>().InstancePerLifetimeScope();
             builder.RegisterType<MovieService>().As<IMovieService>().InstancePerLifetimeScope();
             builder.RegisterType<DataInitializer>().As<IDataInitializer>().InstancePerLifetimeScope();
+            builder.RegisterType<JwtHandler>().As<IJwtHandler>().SingleInstance();
+            builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
