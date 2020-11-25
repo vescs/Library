@@ -65,13 +65,37 @@ namespace Library.Api.Controllers
         {
             command.Id = Guid.NewGuid();
             await _bookService.CreateAsync(command.Id, command.Title, command.Description, command.Author, 
-                command.Pages, command.PublishingHouse, command.PremiereDate);
+                command.Pages, command.PublishingHouse, command.Quantity, command.PremiereDate);
             return Created($"/books/{command.Id}", null);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromBody]UpdateBook command, Guid id)
         {
             await _bookService.UpdateAsync(id, command.Title, command.Description);
+            return NoContent();
+        }
+        [HttpPut("lend/{id}")]
+        public async Task<IActionResult> Put([FromBody]LendBook command, Guid id)
+        {
+            await _bookService.LendAsync(id, command.UserId);
+            return NoContent();
+        }
+        [HttpPut("return/{id}")]
+        public async Task<IActionResult> Put([FromBody]ReturnBook command, Guid id)
+        {
+            await _bookService.ReturnAsync(id, command.UserId);
+            return NoContent();
+        }
+        [HttpPut("add/{id}/{quantity}")]
+        public async Task<IActionResult> PutAdd(Guid id, int quantity)
+        {
+            await _bookService.IncreaseQuantityAsync(id, quantity);
+            return NoContent();
+        }
+        [HttpPut("remove/{id}/{quantity}")]
+        public async Task<IActionResult> PutRemove(Guid id, int quantity)
+        {
+            await _bookService.DecreaseQuantityAsync(id, quantity);
             return NoContent();
         }
     }

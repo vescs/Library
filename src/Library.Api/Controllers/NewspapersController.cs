@@ -48,13 +48,13 @@ namespace Library.Api.Controllers
         [HttpPut("lend/{id}")]
         public async Task<IActionResult> Put([FromBody]LendNewspaper command, Guid id)
         {
-            await _newspaperService.LendAsync(id, command.userId);
+            await _newspaperService.LendAsync(id, command.UserId);
             return NoContent();
         }
         [HttpPut("return/{id}")]
         public async Task<IActionResult> Put([FromBody]ReturnNewspaper command, Guid id)
         {
-            await _newspaperService.ReturnAsync(id, command.userId);
+            await _newspaperService.ReturnAsync(id, command.UserId);
             return NoContent();
         }
         [HttpPut("add/{id}/{quantity}")]

@@ -10,13 +10,17 @@ namespace Library.Infrastructure.IServices
     public interface IBookService
     {
         Task CreateAsync(Guid id, string title, string description, string author, 
-            int pages, string publishingHouse, DateTime premiereDate);
-        Task<BookDTO> GetAsync(Guid id);
-        Task<BookDTO> GetAsync(string title);
+            int pages, string publishingHouse, int quantity, DateTime premiereDate);
+        Task<BookDetailsDTO> GetAsync(Guid id);
+        Task<BookDetailsDTO> GetAsync(string title);
         Task<IEnumerable<BookDTO>> BrowseAsync(string title = "");
         Task<IEnumerable<BookDTO>> BrowseAuthorsAsync(string author = "");
         Task<IEnumerable<BookDTO>> BrowseHousesAsync(string house = "");
         Task DeleteAsync(Guid id);
         Task UpdateAsync(Guid id, string title, string description);
+        Task IncreaseQuantityAsync(Guid id, int quantity);
+        Task DecreaseQuantityAsync(Guid id, int quantity);
+        Task LendAsync(Guid bookId, Guid userId);
+        Task ReturnAsync(Guid bookId, Guid userId);
     }
 }

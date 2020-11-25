@@ -26,7 +26,7 @@ namespace Library.Infrastructure.Services
             for (int i = 0; i < 10; i++)
             {
                 tasks.Add(_bookService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}", 
-                    $"Author {i}", i + 100, $"House {i}", DateTime.UtcNow.AddDays(-i)));
+                    $"Author {i}", i + 100, $"House {i}", 5, DateTime.UtcNow.AddDays(-i)));
                 tasks.Add(_eventService.CreateAsync(Guid.NewGuid(), $"Name {i}", $"Description {i}",
                     DateTime.UtcNow.AddDays(-i), DateTime.UtcNow.AddDays(i)));
                 tasks.Add(_movieService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}",

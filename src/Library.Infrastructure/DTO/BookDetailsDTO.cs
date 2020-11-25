@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Library.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Library.Infrastructure.Commands.Books
+namespace Library.Infrastructure.DTO
 {
-    public class CreateBook
+    public class BookDetailsDTO
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -14,5 +15,8 @@ namespace Library.Infrastructure.Commands.Books
         public string PublishingHouse { get; set; }
         public DateTime PremiereDate { get; set; }
         public int Quantity { get; set; }
+        public int AvailableBooks { get; set; }
+        public int LentBooks { get; set; }
+        public IEnumerable<User> Users { get; set; }
     }
 }

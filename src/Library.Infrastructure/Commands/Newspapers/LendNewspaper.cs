@@ -6,6 +6,6 @@ namespace Library.Infrastructure.Commands.Newspapers
 {
     public class LendNewspaper
     {
-        public Guid userId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

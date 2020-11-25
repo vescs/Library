@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Library.Infrastructure.Commands.Newspapers
+namespace Library.Infrastructure.Commands.Books
 {
-    public class ReturnNewspaper
+    public class ReturnBook
     {
         public Guid UserId { get; set; }
     }
