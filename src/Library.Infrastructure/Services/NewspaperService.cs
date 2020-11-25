@@ -12,12 +12,14 @@ namespace Library.Infrastructure.Services
 {
     public class NewspaperService : INewspaperService
     {
+        private readonly IUserRepository _userRepository;
         private readonly INewspaperRepository _newspaperRepository;
         private readonly IMapper _mapper;
-        public NewspaperService(IMapper mapper, INewspaperRepository newspaperRepository)
+        public NewspaperService(IMapper mapper, INewspaperRepository newspaperRepository, IUserRepository userRepository)
         {
             _newspaperRepository = newspaperRepository;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
         public async Task<IEnumerable<NewspaperDTO>> BrowseAsync(string title = "")
         {
@@ -25,15 +27,26 @@ namespace Library.Infrastructure.Services
             return _mapper.Map<IEnumerable<NewspaperDTO>>(newspapers);
         }
 
-        public async Task CreateAsync(Guid id, string title, string description, string type, DateTime releaseDate)
+        public async Task CreateAsync(Guid id, string title, string description, string type, int quantity, DateTime releaseDate)
         {
             var newspaper = await _newspaperRepository.GetAsync(id);
             if(newspaper != null)
             {
                 throw new Exception($"Newspaper with id {id} already exists.");
             }
-            newspaper = new Newspaper(id, title, description, type, releaseDate);
+            newspaper = new Newspaper(id, title, description, type, quantity, releaseDate);
             await _newspaperRepository.AddAsync(newspaper);
+        }
+
+        public async Task DecreaseQuantityAsync(Guid id, int quantity)
+        {
+            var newspaper = await _newspaperRepository.GetAsync(id);
+            if (newspaper == null)
+            {
+                throw new Exception($"Newspaper with id {id} does not exist.");
+            }
+            newspaper.DecreaseQuantity(quantity);
+            await _newspaperRepository.UpdateAsync(newspaper);
         }
 
         public async Task DeleteAsync(Guid id)
@@ -46,14 +59,57 @@ namespace Library.Infrastructure.Services
             await _newspaperRepository.DeleteAsync(id);
         }
 
-        public async Task<NewspaperDTO> GetAsync(Guid id)
+        public async Task<NewspaperDetailsDTO> GetAsync(Guid id)
         {
             var newspaper = await _newspaperRepository.GetAsync(id);
             if(newspaper == null)
             {
                 throw new Exception($"Newspaper with id {id} does not exist.");
             }
-            return _mapper.Map<NewspaperDTO>(newspaper);
+            return _mapper.Map<NewspaperDetailsDTO>(newspaper);
+        }
+
+        public async Task IncreaseQuantityAsync(Guid id, int quantity)
+        {
+            var newspaper = await _newspaperRepository.GetAsync(id);
+            if (newspaper == null)
+            {
+                throw new Exception($"Newspaper with id {id} does not exist.");
+            }
+            newspaper.IncreaseQuantity(quantity);
+            await _newspaperRepository.UpdateAsync(newspaper);
+        }
+
+        public async Task LendAsync(Guid newspaperId, Guid userId)
+        {
+            var newspaper = await _newspaperRepository.GetAsync(newspaperId);
+            if (newspaper == null)
+            {
+                throw new Exception($"Newspaper with id {newspaperId} does not exist.");
+            }
+            var user = await _userRepository.GetAsync(userId);
+            if (user == null)
+            {
+                throw new Exception($"User with id {userId} does not exist.");
+            }
+            newspaper.Lend(user);
+            await _newspaperRepository.UpdateAsync(newspaper);
+        }
+
+        public async Task ReturnAsync(Guid newspaperId, Guid userId)
+        {
+            var newspaper = await _newspaperRepository.GetAsync(newspaperId);
+            if (newspaper == null)
+            {
+                throw new Exception($"Newspaper with id {newspaperId} does not exist.");
+            }
+            var user = await _userRepository.GetAsync(userId);
+            if (user == null)
+            {
+                throw new Exception($"User with id {userId} does not exist.");
+            }
+            newspaper.Return(user);
+            await _newspaperRepository.UpdateAsync(newspaper);
         }
 
         public async Task UpdateAsync(Guid id, string description)

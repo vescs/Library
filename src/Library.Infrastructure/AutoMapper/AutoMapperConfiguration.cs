@@ -16,6 +16,7 @@ namespace Library.Infrastructure.AutoMapper
                 cfg.CreateMap<Newspaper, NewspaperDTO>();
                 cfg.CreateMap<Event, EventDTO>();
                 cfg.CreateMap<Movie, MovieDTO>();
+                cfg.CreateMap<Newspaper, NewspaperDetailsDTO>();
             })
             .CreateMapper();
     }

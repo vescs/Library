@@ -32,7 +32,7 @@ namespace Library.Infrastructure.Services
                 tasks.Add(_movieService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}",
                     $"Director {i}", i + 110, DateTime.UtcNow.AddDays(-i)));
                 tasks.Add(_newspaperService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}",
-                    $"Type {i}", DateTime.UtcNow.AddDays(-i)));
+                    $"Type {i}", 10, DateTime.UtcNow.AddDays(-i)));
             }
             await Task.WhenAll(tasks);
         }

@@ -36,13 +36,37 @@ namespace Library.Api.Controllers
         public async Task<IActionResult> Post([FromBody]CreateNewspaper command)
         {
             command.Id = Guid.NewGuid();
-            await _newspaperService.CreateAsync(command.Id, command.Title, command.Description, command.Type, command.ReleaseDate);
+            await _newspaperService.CreateAsync(command.Id, command.Title, command.Description, command.Type, command.Quantity, command.ReleaseDate);
             return Created($"newspapers/{command.Id}", null);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromBody]UpdateNewspaper command, Guid id)
         {
             await _newspaperService.UpdateAsync(id, command.Description);
+            return NoContent();
+        }
+        [HttpPut("lend/{id}")]
+        public async Task<IActionResult> Put([FromBody]LendNewspaper command, Guid id)
+        {
+            await _newspaperService.LendAsync(id, command.userId);
+            return NoContent();
+        }
+        [HttpPut("return/{id}")]
+        public async Task<IActionResult> Put([FromBody]ReturnNewspaper command, Guid id)
+        {
+            await _newspaperService.ReturnAsync(id, command.userId);
+            return NoContent();
+        }
+        [HttpPut("add/{id}/{quantity}")]
+        public async Task<IActionResult> PutAdd(Guid id, int quantity)
+        {
+            await _newspaperService.IncreaseQuantityAsync(id, quantity);
+            return NoContent();
+        }
+        [HttpPut("remove/{id}/{quantity}")]
+        public async Task<IActionResult> PutRemove(Guid id, int quantity)
+        {
+            await _newspaperService.DecreaseQuantityAsync(id, quantity);
             return NoContent();
         }
         [HttpDelete]

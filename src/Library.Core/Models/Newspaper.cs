@@ -6,20 +6,26 @@ namespace Library.Core.Models
 {
     public class Newspaper : Entity
     {
+        private ISet<User> _users = new HashSet<User>();
         public string Title { get; protected set; }
         public string Type { get; protected set; }
         public string Description { get; protected set; }
         public DateTime ReleaseDate { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
+        public IEnumerable<User> Users { get { return _users; } }
+        public int Quantity { get; protected set; }
+        public int AvailableNewspapers => Quantity - _users.Count;
+        public int LentNewspapers => _users.Count;
         protected Newspaper() { }
-        public Newspaper(Guid id, string title, string description, string type, DateTime releaseDate)
+        public Newspaper(Guid id, string title, string description, string type, int quantity, DateTime releaseDate)
         {
             Id = id;
             SetTitle(title);
             SetDescription(description);
             SetReleaseDate(releaseDate);
             SetType(type);
+            SetQuantity(quantity);
             CreatedAt = DateTime.UtcNow;
             Update();
         }
@@ -74,6 +80,59 @@ namespace Library.Core.Models
                 return;
             }
             Type = type;
+            Update();
+        }
+        public void SetQuantity(int quantity)
+        {
+            if (quantity <= 0)
+            {
+                throw new Exception("Quantity has to be greater than zero.");
+            }
+            if (quantity == Quantity)
+            {
+                return;
+            }
+            Quantity = quantity;
+            Update();
+        }
+        public void IncreaseQuantity(int quantity)
+        {
+            if(quantity <= 0)
+            {
+                throw new Exception("Quantity has to be greater than zero.");
+            }
+            Quantity += quantity;
+            Update();
+        }
+        public void DecreaseQuantity(int quantity)
+        {
+            if (quantity <= 0)
+            {
+                throw new Exception("Quantity has to be greater than zero.");
+            }
+            Quantity -= quantity;
+            Update();
+        }
+        public void Lend(User user)
+        {
+            if(_users.Count >= Quantity)
+            {
+                throw new Exception("There are no available newspapers.");
+            }
+            if (_users.Contains(user))
+            {
+                throw new Exception("You already own this newspaper.");
+            }
+            _users.Add(user);
+            Update();
+        }
+        public void Return(User user)
+        {
+            if (!_users.Contains(user))
+            {
+                throw new Exception("There is nothing to return.");
+            }
+            _users.Remove(user);
             Update();
         }
         private void Update()
