@@ -30,7 +30,7 @@ namespace Library.Infrastructure.Services
                 tasks.Add(_eventService.CreateAsync(Guid.NewGuid(), $"Name {i}", $"Description {i}",
                     DateTime.UtcNow.AddDays(-i), DateTime.UtcNow.AddDays(i)));
                 tasks.Add(_movieService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}",
-                    $"Director {i}", i + 110, DateTime.UtcNow.AddDays(-i)));
+                    $"Director {i}", i + 110, 15, DateTime.UtcNow.AddDays(-i)));
                 tasks.Add(_newspaperService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}",
                     $"Type {i}", 10, DateTime.UtcNow.AddDays(-i)));
             }

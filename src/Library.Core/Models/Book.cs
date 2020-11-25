@@ -147,7 +147,7 @@ namespace Library.Core.Models
         {
             if (_users.Count >= Quantity)
             {
-                throw new Exception("There are no available newspapers.");
+                throw new Exception("There are no available books.");
             }
             if (_users.Contains(user))
             {

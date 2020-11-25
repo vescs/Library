@@ -47,7 +47,7 @@ namespace Library.Api.Controllers
         {
             command.Id = Guid.NewGuid();
             await _movieService.CreateAsync(command.Id, command.Title, command.Description, command.Director, 
-                command.Length, command.PremiereDate);
+                command.Length, command.Quantity, command.PremiereDate);
             return Created($"/movies/{command.Id}", null);
         }
         [HttpPut]
@@ -59,6 +59,30 @@ namespace Library.Api.Controllers
                 return NotFound();
             }
             await _movieService.UpdateAsync(id, command.Description);
+            return NoContent();
+        }
+        [HttpPut("lend/{id}")]
+        public async Task<IActionResult> Put([FromBody]LendMovie command, Guid id)
+        {
+            await _movieService.LendAsync(id, command.UserId);
+            return NoContent();
+        }
+        [HttpPut("return/{id}")]
+        public async Task<IActionResult> Put([FromBody]ReturnMovie command, Guid id)
+        {
+            await _movieService.ReturnAsync(id, command.UserId);
+            return NoContent();
+        }
+        [HttpPut("add/{id}/{quantity}")]
+        public async Task<IActionResult> PutAdd(Guid id, int quantity)
+        {
+            await _movieService.IncreaseQuantityAsync(id, quantity);
+            return NoContent();
+        }
+        [HttpPut("remove/{id}/{quantity}")]
+        public async Task<IActionResult> PutRemove(Guid id, int quantity)
+        {
+            await _movieService.DecreaseQuantityAsync(id, quantity);
             return NoContent();
         }
         [HttpDelete]

@@ -8,11 +8,15 @@ namespace Library.Infrastructure.IServices
 {
     public interface IMovieService
     {
-        Task CreateAsync(Guid id, string title, string description, string director, int length, DateTime premiereDate);
+        Task CreateAsync(Guid id, string title, string description, string director, int length, int quantity, DateTime premiereDate);
         Task<IEnumerable<MovieDTO>> BrowseAsync(string title = "");
-        Task<MovieDTO> GetAsync(Guid id);
-        Task<MovieDTO> GetAsync(string title);
+        Task<MovieDetailsDTO> GetAsync(Guid id);
+        Task<MovieDetailsDTO> GetAsync(string title);
         Task DeleteAsync(Guid id);
         Task UpdateAsync(Guid id, string description);
+        Task IncreaseQuantityAsync(Guid id, int quantity);
+        Task DecreaseQuantityAsync(Guid id, int quantity);
+        Task LendAsync(Guid movieId, Guid userId);
+        Task ReturnAsync(Guid movieId, Guid userId);
     }
 }
