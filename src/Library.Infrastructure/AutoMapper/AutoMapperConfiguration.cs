@@ -19,7 +19,7 @@ namespace Library.Infrastructure.AutoMapper
                 cfg.CreateMap<Event, EventDTO>();
                 cfg.CreateMap<Movie, MovieDTO>();
                 cfg.CreateMap<Movie, MovieDetailsDTO>();
-
+                cfg.CreateMap<User, UserDTO>();
             })
             .CreateMapper();
     }

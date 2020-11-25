@@ -14,7 +14,6 @@ namespace Library.Core.Repositories
         Task<IEnumerable<Book>> BrowseHousesAsync(string house = "");
         Task DeleteAsync(Guid id);
         Task<Book> GetAsync(Guid id);
-        Task<Book> GetAsync(string title);
         Task UpdateAsync(Book book);
     }
 }

@@ -32,16 +32,7 @@ namespace Library.Api.Controllers
             }
             return Json(movie);
         }
-        [HttpGet("title/{title}")]
-        public async Task<IActionResult> GetTitle(string title)
-        {
-            var movie = await _movieService.GetAsync(title);
-            if (movie == null)
-            {
-                return NotFound();
-            }
-            return Json(movie);
-        }
+        
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateMovie command)
         {

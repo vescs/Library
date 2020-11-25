@@ -1,5 +1,4 @@
-﻿using Library.Core.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,6 +15,6 @@ namespace Library.Infrastructure.DTO
         public int Quantity { get; set; }
         public int AvailableMovies { get; set; }
         public int LentMovies { get; set; }
-        public IEnumerable<User> Users { get; set; }
+        public IEnumerable<UserDTO> Users { get; set; }
     }
 }

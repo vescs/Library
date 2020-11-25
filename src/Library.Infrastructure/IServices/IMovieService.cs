@@ -11,7 +11,6 @@ namespace Library.Infrastructure.IServices
         Task CreateAsync(Guid id, string title, string description, string director, int length, int quantity, DateTime premiereDate);
         Task<IEnumerable<MovieDTO>> BrowseAsync(string title = "");
         Task<MovieDetailsDTO> GetAsync(Guid id);
-        Task<MovieDetailsDTO> GetAsync(string title);
         Task DeleteAsync(Guid id);
         Task UpdateAsync(Guid id, string description);
         Task IncreaseQuantityAsync(Guid id, int quantity);

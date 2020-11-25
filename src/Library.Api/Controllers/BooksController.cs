@@ -44,16 +44,7 @@ namespace Library.Api.Controllers
             }
             return Json(book);
         }
-        [HttpGet("title/{title}")]
-        public async Task<IActionResult> GetTitle(string title)
-        {
-            var book = await _bookService.GetAsync(title);
-            if (book == null)
-            {
-                return NotFound();
-            }
-            return Json(book);
-        }
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {

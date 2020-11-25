@@ -82,15 +82,6 @@ namespace Library.Infrastructure.Services
             return _mapper.Map<BookDetailsDTO>(book);
         }
 
-        public async Task<BookDetailsDTO> GetAsync(string title)
-        {
-            var book = await _bookRepository.GetAsync(title);
-            if (book == null)
-            {
-                throw new Exception($"Book with title '{title}' does not exist.");
-            }
-            return _mapper.Map<BookDetailsDTO>(book);
-        }
 
         public async Task IncreaseQuantityAsync(Guid id, int quantity)
         {

@@ -12,7 +12,6 @@ namespace Library.Core.Repositories
         Task<IEnumerable<Movie>> BrowseAsync(string name = "");
         Task DeleteAsync(Guid id);
         Task<Movie> GetAsync(Guid id);
-        Task<Movie> GetAsync(string title);
         Task UpdateAsync(Movie movie);
     }
 }

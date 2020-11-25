@@ -12,7 +12,6 @@ namespace Library.Infrastructure.IServices
         Task CreateAsync(Guid id, string title, string description, string author, 
             int pages, string publishingHouse, int quantity, DateTime premiereDate);
         Task<BookDetailsDTO> GetAsync(Guid id);
-        Task<BookDetailsDTO> GetAsync(string title);
         Task<IEnumerable<BookDTO>> BrowseAsync(string title = "");
         Task<IEnumerable<BookDTO>> BrowseAuthorsAsync(string author = "");
         Task<IEnumerable<BookDTO>> BrowseHousesAsync(string house = "");

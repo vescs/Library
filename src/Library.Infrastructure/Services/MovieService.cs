@@ -35,11 +35,6 @@ namespace Library.Infrastructure.Services
             {
                 throw new Exception($"Movie with id {id} already exists.");
             }
-            movie = await _movieRepository.GetAsync(title);
-            if (movie != null)
-            {
-                throw new Exception($"Movie with title '{title}' already exists.");
-            }
             movie = new Movie(id, title, description, director, length, quantity, premiereDate);
             await _movieRepository.AddAsync(movie);
         }
@@ -75,15 +70,6 @@ namespace Library.Infrastructure.Services
             return _mapper.Map<MovieDetailsDTO>(movie);
         }
 
-        public async Task<MovieDetailsDTO> GetAsync(string title)
-        {
-            var movie = await _movieRepository.GetAsync(title);
-            if (movie == null)
-            {
-                throw new Exception($"Movie with title '{title}' does not exist.");
-            }
-            return _mapper.Map<MovieDetailsDTO>(movie);
-        }
 
         public async Task IncreaseQuantityAsync(Guid id, int quantity)
         {

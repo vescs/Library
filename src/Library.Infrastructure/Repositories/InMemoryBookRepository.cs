@@ -61,11 +61,6 @@ namespace Library.Infrastructure.Repositories
             return await Task.FromResult(_books.SingleOrDefault(x => x.Id == id));
         }
 
-        public async Task<Book> GetAsync(string title)
-        {
-            return await Task.FromResult(_books.SingleOrDefault(x => x.Title.ToLowerInvariant() == title.ToLowerInvariant()));
-        }
-
         public async Task UpdateAsync(Book book)
         {
             await Task.CompletedTask;

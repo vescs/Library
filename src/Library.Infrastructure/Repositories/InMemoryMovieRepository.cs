@@ -41,11 +41,6 @@ namespace Library.Infrastructure.Repositories
             return await Task.FromResult(movie);
         }
 
-        public async Task<Movie> GetAsync(string title)
-        {
-            var movie = _movies.SingleOrDefault(x => x.Title.ToLowerInvariant() == title.ToLowerInvariant());
-            return await Task.FromResult(movie);
-        }
 
         public async Task UpdateAsync(Movie movie)
         {
