@@ -86,6 +86,7 @@ namespace Library.Api
             builder.RegisterType<DataInitializer>().As<IDataInitializer>().InstancePerLifetimeScope();
             builder.RegisterType<JwtHandler>().As<IJwtHandler>().SingleInstance();
             builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
+            builder.RegisterType<TicketService>().As<ITicketService>().InstancePerLifetimeScope();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

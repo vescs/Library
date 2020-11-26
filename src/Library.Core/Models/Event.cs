@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Library.Core.Models
@@ -12,7 +13,8 @@ namespace Library.Core.Models
         public DateTime StartDate { get; protected set; }
         public DateTime EndDate { get; protected set; }
         public IEnumerable<Ticket> Tickets { get { return _tickets; } }
-        //available tickets and purchased - later
+        public IEnumerable<Ticket> PurchasedTickets => Tickets.Where(x => x.Purchased);
+        public IEnumerable<Ticket> AvailableTickets => Tickets.Where(x => !x.Purchased);
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
         protected Event() { }
@@ -83,11 +85,64 @@ namespace Library.Core.Models
             EndDate = endDate;
             Update();
         }
-        public void AddTickets()
+        public void AddTickets(int amount, decimal price, bool seat)
         {
-            //todo
+            if (amount <= 0)
+            {
+                throw new Exception("Amount of tickets has to be greater than zero.");
+            }
+            if (price < 0)
+            {
+                throw new Exception("Price of tickets can not be negative number.");
+            }
+            for (int i = 0; i < amount; i++)
+            {
+                _tickets.Add(new Ticket(this, seat, price));
+            }
+            Update();
         }
-        //todo tickets bought by user
+        public void PurchaseTickets(User user, int amount, bool seat)
+        {
+            if (amount <= 0)
+            {
+                throw new Exception("Amount of tickets has to be greater than zero.");
+            }
+            if (AvailableTickets.Count() < amount)
+            {
+                throw new Exception("There is less tickets than you want to buy.");
+            }
+            var tickets = AvailableTickets.Where(x => x.Seat == seat).Take(amount);
+            if(tickets.Count() < amount)
+            {
+                throw new Exception("There is less tickets than you want to buy.");
+            }
+            foreach (var ticket in tickets)
+            {
+                ticket.Purchase(user);
+            }
+            Update();
+        }
+        public void CancelTickets(User user, int amount, bool seat)
+        {
+            if(amount <= 0)
+            {
+                throw new Exception("Amount of tickets has to be greater than zero.");
+            }
+            var tickets = TicketsBoughtByUser(user).Where(x => x.Seat == seat).Take(amount);
+            if (tickets.Count() < amount)
+            {
+                throw new Exception("You want to cancel more tickets than you own.");
+            }
+            foreach (var ticket in tickets)
+            {
+                ticket.Cancel(user);
+            }
+            Update();
+        }
+        public IEnumerable<Ticket> TicketsBoughtByUser(User user)
+        {
+            return PurchasedTickets.Where(x => x.UserId == user.Id);
+        }
         private void Update()
         {
             UpdatedAt = DateTime.UtcNow;

@@ -61,6 +61,17 @@ namespace Library.Api.Controllers
             await _eventService.UpdateAsync(id, command.Description);
             return NoContent();
         }
+        [HttpPut("command.EventId/add")]
+        public async Task<IActionResult> Put([FromBody]AddTickets command)
+        {
+            var @event = await _eventService.GetAsync(command.EventId);
+            if (@event == null)
+            {
+                return NotFound();
+            }
+            await _eventService.AddTicketsAsync(command.EventId, command.Amount, command.Price, command.Seat);
+            return NoContent();
+        }
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {

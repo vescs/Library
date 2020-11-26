@@ -27,8 +27,11 @@ namespace Library.Infrastructure.Services
             {
                 tasks.Add(_bookService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}", 
                     $"Author {i}", i + 100, $"House {i}", 5, DateTime.UtcNow.AddDays(-i)));
-                tasks.Add(_eventService.CreateAsync(Guid.NewGuid(), $"Name {i}", $"Description {i}",
+                Guid id = Guid.NewGuid();
+                tasks.Add(_eventService.CreateAsync(id, $"Name {i}", $"Description {i}",
                     DateTime.UtcNow.AddDays(-i), DateTime.UtcNow.AddDays(i)));
+                tasks.Add(_eventService.AddTicketsAsync(id, 5, 15, true));
+                tasks.Add(_eventService.AddTicketsAsync(id, 5, 10, false));
                 tasks.Add(_movieService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}",
                     $"Director {i}", i + 110, 15, DateTime.UtcNow.AddDays(-i)));
                 tasks.Add(_newspaperService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}",

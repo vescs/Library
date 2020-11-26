@@ -8,7 +8,7 @@ namespace Library.Core.Models
     {
         public Guid EventId { get; protected set; }
         public Guid? UserId { get; protected set; }
-        public bool Seating { get; protected set; }
+        public bool Seat { get; protected set; }
         public decimal Price { get; protected set; }
         public string Username { get; protected set; }
         public DateTime? PurchasedAt { get; protected set; }
@@ -19,16 +19,28 @@ namespace Library.Core.Models
         public Ticket(Event @event, bool seat, decimal price)
         {
             EventId = @event.Id;
-            Seating = seat;
+            Seat = seat;
             Price = price;
         }
         public void Purchase(User user)
         {
-            //todo
+            if (Purchased)
+            {
+                throw new Exception($"Ticket was already purchased by: {Username}.");
+            }
+            UserId = user.Id;
+            Username = user.Username;
+            PurchasedAt = DateTime.UtcNow;
         }
         public void Cancel(User user)
         {
-            //todo
+            if (!Purchased)
+            {
+                throw new Exception($"Ticket wasn't purchased.");
+            }
+            UserId = null;
+            Username = null;
+            PurchasedAt = null;
         }
     }
 }

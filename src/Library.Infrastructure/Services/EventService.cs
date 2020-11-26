@@ -19,6 +19,18 @@ namespace Library.Infrastructure.Services
             _mapper = mapper;
             _eventRepository = eventRepository;
         }
+
+        public async Task AddTicketsAsync(Guid eventId, int amount, decimal price, bool seat)
+        {
+            var @event = await _eventRepository.GetAsync(eventId);
+            if (@event == null)
+            {
+                throw new Exception($"Event with id {eventId} does not exist.");
+            }
+            @event.AddTickets(amount, price, seat);
+            await _eventRepository.UpdateAsync(@event);
+        }
+
         public async Task<IEnumerable<EventDTO>> BrowseAsync(string title = "")
         {
             var events = await _eventRepository.BrowseAsync(title);
@@ -51,24 +63,24 @@ namespace Library.Infrastructure.Services
             await _eventRepository.DeleteAsync(id);
         }
 
-        public async Task<EventDTO> GetAsync(Guid id)
+        public async Task<EventDetailsDTO> GetAsync(Guid id)
         {
             var @event = await _eventRepository.GetAsync(id);
             if (@event == null)
             {
                 throw new Exception($"Event with id {id} does not exist.");
             }
-            return _mapper.Map<EventDTO>(@event);
+            return _mapper.Map<EventDetailsDTO>(@event);
         }
 
-        public async Task<EventDTO> GetAsync(string title)
+        public async Task<EventDetailsDTO> GetAsync(string name)
         {
-            var @event = await _eventRepository.GetAsync(title);
+            var @event = await _eventRepository.GetAsync(name);
             if (@event == null)
             {
-                throw new Exception($"Event with title '{title}' does not exist.");
+                throw new Exception($"Event with name '{name}' does not exist.");
             }
-            return _mapper.Map<EventDTO>(@event);
+            return _mapper.Map<EventDetailsDTO>(@event);
         }
 
         public async Task UpdateAsync(Guid id, string description)
