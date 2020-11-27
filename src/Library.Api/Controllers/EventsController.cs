@@ -1,5 +1,6 @@
 ﻿using Library.Infrastructure.Commands.Events;
 using Library.Infrastructure.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,7 @@ namespace Library.Api.Controllers
             return Json(@event);
         }
         [HttpPost]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Post([FromBody]CreateEvent command)
         {
             command.Id = Guid.NewGuid();
@@ -50,6 +52,7 @@ namespace Library.Api.Controllers
             return Created($"/events/{command.Id}", null);
         }
         [HttpPut]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Put([FromBody]UpdateEvent command, Guid id)
         {
             var @event = await _eventService.GetAsync(id);
@@ -61,6 +64,7 @@ namespace Library.Api.Controllers
             return NoContent();
         }
         [HttpPut("command.EventId/add")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Put([FromBody]AddTickets command)
         {
             var @event = await _eventService.GetAsync(command.EventId);
@@ -72,6 +76,7 @@ namespace Library.Api.Controllers
             return NoContent();
         }
         [HttpDelete]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var @event = await _eventService.GetAsync(id);

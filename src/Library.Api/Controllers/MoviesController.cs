@@ -34,6 +34,7 @@ namespace Library.Api.Controllers
         }
         
         [HttpPost]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Post([FromBody]CreateMovie command)
         {
             command.Id = Guid.NewGuid();
@@ -42,6 +43,7 @@ namespace Library.Api.Controllers
             return Created($"/movies/{command.Id}", null);
         }
         [HttpPut]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Put([FromBody]UpdateMovie command, Guid id)
         {
             var movie = await _movieService.GetAsync(id);
@@ -67,18 +69,21 @@ namespace Library.Api.Controllers
             return NoContent();
         }
         [HttpPut("add/{id}/{quantity}")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> PutAdd(Guid id, int quantity)
         {
             await _movieService.IncreaseQuantityAsync(id, quantity);
             return NoContent();
         }
         [HttpPut("remove/{id}/{quantity}")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> PutRemove(Guid id, int quantity)
         {
             await _movieService.DecreaseQuantityAsync(id, quantity);
             return NoContent();
         }
         [HttpDelete]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var movie = await _movieService.GetAsync(id);

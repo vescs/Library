@@ -33,6 +33,7 @@ namespace Library.Api.Controllers
             return Json(newspaper);
         }
         [HttpPost]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Post([FromBody]CreateNewspaper command)
         {
             command.Id = Guid.NewGuid();
@@ -40,6 +41,7 @@ namespace Library.Api.Controllers
             return Created($"newspapers/{command.Id}", null);
         }
         [HttpPut("{id}")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Put([FromBody]UpdateNewspaper command, Guid id)
         {
             await _newspaperService.UpdateAsync(id, command.Description);
@@ -60,18 +62,21 @@ namespace Library.Api.Controllers
             return NoContent();
         }
         [HttpPut("add/{id}/{quantity}")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> PutAdd(Guid id, int quantity)
         {
             await _newspaperService.IncreaseQuantityAsync(id, quantity);
             return NoContent();
         }
         [HttpPut("remove/{id}/{quantity}")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> PutRemove(Guid id, int quantity)
         {
             await _newspaperService.DecreaseQuantityAsync(id, quantity);
             return NoContent();
         }
         [HttpDelete]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _newspaperService.DeleteAsync(id);

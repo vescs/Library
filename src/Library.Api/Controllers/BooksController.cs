@@ -46,12 +46,14 @@ namespace Library.Api.Controllers
         }
         
         [HttpDelete("{id}")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             await _bookService.DeleteAsync(id);
             return NoContent();
         }
         [HttpPost]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Post([FromBody]CreateBook command)
         {
             command.Id = Guid.NewGuid();
@@ -60,6 +62,7 @@ namespace Library.Api.Controllers
             return Created($"/books/{command.Id}", null);
         }
         [HttpPut("{id}")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Put([FromBody]UpdateBook command, Guid id)
         {
             await _bookService.UpdateAsync(id, command.Title, command.Description);
@@ -80,12 +83,14 @@ namespace Library.Api.Controllers
             return NoContent();
         }
         [HttpPut("add/{id}/{quantity}")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> PutAdd(Guid id, int quantity)
         {
             await _bookService.IncreaseQuantityAsync(id, quantity);
             return NoContent();
         }
         [HttpPut("remove/{id}/{quantity}")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> PutRemove(Guid id, int quantity)
         {
             await _bookService.DecreaseQuantityAsync(id, quantity);
