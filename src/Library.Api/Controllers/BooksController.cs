@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace Library.Api.Controllers
 {
-    [Route("[controller]")]
     public class BooksController : ControllerBase
     {
         private readonly IBookService _bookService;
@@ -36,7 +35,6 @@ namespace Library.Api.Controllers
             return Json(books);
         }
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<IActionResult> Get(Guid id)
         {
             var book = await _bookService.GetAsync(id);
@@ -68,15 +66,17 @@ namespace Library.Api.Controllers
             return NoContent();
         }
         [HttpPut("lend/{id}")]
-        public async Task<IActionResult> Put([FromBody]LendBook command, Guid id)
+        [Authorize]
+        public async Task<IActionResult> PutLend(Guid id)
         {
-            await _bookService.LendAsync(id, command.UserId);
+            await _bookService.LendAsync(id, UserId);
             return NoContent();
         }
         [HttpPut("return/{id}")]
-        public async Task<IActionResult> Put([FromBody]ReturnBook command, Guid id)
+        [Authorize]
+        public async Task<IActionResult> PutReturn(Guid id)
         {
-            await _bookService.ReturnAsync(id, command.UserId);
+            await _bookService.ReturnAsync(id, UserId);
             return NoContent();
         }
         [HttpPut("add/{id}/{quantity}")]

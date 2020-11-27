@@ -14,11 +14,19 @@ namespace Library.Infrastructure.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtHandler _jwtHandler;
+        private readonly IMapper _mapper;
         
-        public UserService(IUserRepository userRepository, IJwtHandler jwtHandler)
+        public UserService(IUserRepository userRepository, IJwtHandler jwtHandler, IMapper mapper)
         {
             _userRepository = userRepository;
             _jwtHandler = jwtHandler;
+            _mapper = mapper;
+        }
+
+        public async Task<UserDTO> GetUserInfoAsync(Guid id)
+        {
+            var user = await _userRepository.GetAsync(id);
+            return _mapper.Map<UserDTO>(user);
         }
 
         public async Task<TokenDTO> LoginAsync(string email, string password)

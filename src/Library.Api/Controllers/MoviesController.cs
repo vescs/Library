@@ -1,5 +1,6 @@
 ﻿using Library.Infrastructure.Commands.Movies;
 using Library.Infrastructure.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,7 @@ using System.Threading.Tasks;
 
 namespace Library.Api.Controllers
 {
-    [Route("[controller]")]
-    public class MoviesController : Controller
+    public class MoviesController : ControllerBase
     {
         private readonly IMovieService _movieService;
         public MoviesController(IMovieService movieService)
@@ -53,15 +53,17 @@ namespace Library.Api.Controllers
             return NoContent();
         }
         [HttpPut("lend/{id}")]
-        public async Task<IActionResult> Put([FromBody]LendMovie command, Guid id)
+        [Authorize]
+        public async Task<IActionResult> PutLend(Guid id)
         {
-            await _movieService.LendAsync(id, command.UserId);
+            await _movieService.LendAsync(id, UserId);
             return NoContent();
         }
         [HttpPut("return/{id}")]
-        public async Task<IActionResult> Put([FromBody]ReturnMovie command, Guid id)
+        [Authorize]
+        public async Task<IActionResult> PutReturn(Guid id)
         {
-            await _movieService.ReturnAsync(id, command.UserId);
+            await _movieService.ReturnAsync(id, UserId);
             return NoContent();
         }
         [HttpPut("add/{id}/{quantity}")]

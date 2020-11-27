@@ -1,5 +1,6 @@
 ﻿using Library.Infrastructure.Commands.Newspapers;
 using Library.Infrastructure.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,7 @@ using System.Threading.Tasks;
 
 namespace Library.Api.Controllers
 {
-    [Route("[controller]")]
-    public class NewspapersController : Controller
+    public class NewspapersController : ControllerBase
     {
         private readonly INewspaperService _newspaperService;
         public NewspapersController(INewspaperService newspaperService)
@@ -46,15 +46,17 @@ namespace Library.Api.Controllers
             return NoContent();
         }
         [HttpPut("lend/{id}")]
-        public async Task<IActionResult> Put([FromBody]LendNewspaper command, Guid id)
+        [Authorize]
+        public async Task<IActionResult> PutLend(Guid id)
         {
-            await _newspaperService.LendAsync(id, command.UserId);
+            await _newspaperService.LendAsync(id, UserId);
             return NoContent();
         }
         [HttpPut("return/{id}")]
-        public async Task<IActionResult> Put([FromBody]ReturnNewspaper command, Guid id)
+        [Authorize]
+        public async Task<IActionResult> PutReturn(Guid id)
         {
-            await _newspaperService.ReturnAsync(id, command.UserId);
+            await _newspaperService.ReturnAsync(id, UserId);
             return NoContent();
         }
         [HttpPut("add/{id}/{quantity}")]

@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace Library.Api.Controllers
 {
-    [Route("[controller]")]
-    public class EventsController : Controller
+    public class EventsController : ControllerBase
     {
         private readonly IEventService _eventService;
         public EventsController(IEventService eventService)

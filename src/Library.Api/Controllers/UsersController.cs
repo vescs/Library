@@ -1,5 +1,6 @@
 ﻿using Library.Infrastructure.Commands.Users;
 using Library.Infrastructure.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,18 @@ using System.Threading.Tasks;
 
 namespace Library.Api.Controllers
 {
-    [Route("[controller]")]
-    public class UsersController : Controller
+    public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
         public UsersController(IUserService userService)
         {
             _userService = userService;
+        }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Get()
+        {
+            return Json(await _userService.GetUserInfoAsync(UserId));
         }
         [HttpPost("register")]
         public async Task<IActionResult> Post([FromBody]Register command)
