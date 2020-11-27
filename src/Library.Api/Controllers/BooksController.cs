@@ -1,5 +1,6 @@
 ﻿using Library.Infrastructure.Commands.Books;
 using Library.Infrastructure.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace Library.Api.Controllers
 {
     [Route("[controller]")]
-    public class BooksController : Controller
+    public class BooksController : ControllerBase
     {
         private readonly IBookService _bookService;
         public BooksController(IBookService bookService)
@@ -35,6 +36,7 @@ namespace Library.Api.Controllers
             return Json(books);
         }
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Get(Guid id)
         {
             var book = await _bookService.GetAsync(id);
