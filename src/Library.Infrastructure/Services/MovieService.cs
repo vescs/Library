@@ -2,6 +2,7 @@
 using Library.Core.Models;
 using Library.Core.Repositories;
 using Library.Infrastructure.DTO;
+using Library.Infrastructure.Extentions;
 using Library.Infrastructure.IServices;
 using System;
 using System.Collections.Generic;
@@ -41,86 +42,50 @@ namespace Library.Infrastructure.Services
 
         public async Task DecreaseQuantityAsync(Guid id, int quantity)
         {
-            var movie = await _movieRepository.GetAsync(id);
-            if (movie == null)
-            {
-                throw new Exception($"Movie with id {id} does not exist.");
-            }
+            var movie = await _movieRepository.SafeGetAsync(id);
             movie.DecreaseQuantity(quantity);
             await _movieRepository.UpdateAsync(movie);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            var movie = await _movieRepository.GetAsync(id);
-            if(movie == null)
-            {
-                throw new Exception($"Movie with id {id} does not exist.");
-            }
+            await _movieRepository.SafeGetAsync(id);
             await _movieRepository.DeleteAsync(id);
         }
 
         public async Task<MovieDetailsDTO> GetAsync(Guid id)
         {
-            var movie = await _movieRepository.GetAsync(id);
-            if (movie == null)
-            {
-                throw new Exception($"Movie with id {id} does not exist.");
-            }
+            var movie = await _movieRepository.SafeGetAsync(id);
             return _mapper.Map<MovieDetailsDTO>(movie);
         }
 
 
         public async Task IncreaseQuantityAsync(Guid id, int quantity)
         {
-            var movie = await _movieRepository.GetAsync(id);
-            if (movie == null)
-            {
-                throw new Exception($"Movie with id {id} does not exist.");
-            }
+            var movie = await _movieRepository.SafeGetAsync(id);
             movie.IncreaseQuantity(quantity);
             await _movieRepository.UpdateAsync(movie);
         }
 
         public async Task LendAsync(Guid movieId, Guid userId)
         {
-            var movie = await _movieRepository.GetAsync(movieId);
-            if (movie == null)
-            {
-                throw new Exception($"Book with id {movieId} does not exist.");
-            }
-            var user = await _userRepository.GetAsync(userId);
-            if (user == null)
-            {
-                throw new Exception($"User with id {userId} does not exist.");
-            }
+            var movie = await _movieRepository.SafeGetAsync(movieId);
+            var user = await _userRepository.SafeGetAsync(userId);
             movie.Lend(user);
             await _movieRepository.UpdateAsync(movie);
         }
 
         public async Task ReturnAsync(Guid movieId, Guid userId)
         {
-            var movie = await _movieRepository.GetAsync(movieId);
-            if (movie == null)
-            {
-                throw new Exception($"Book with id {movieId} does not exist.");
-            }
-            var user = await _userRepository.GetAsync(userId);
-            if (user == null)
-            {
-                throw new Exception($"User with id {userId} does not exist.");
-            }
+            var movie = await _movieRepository.SafeGetAsync(movieId);
+            var user = await _userRepository.SafeGetAsync(userId);
             movie.Return(user);
             await _movieRepository.UpdateAsync(movie);
         }
 
         public async Task UpdateAsync(Guid id, string description)
         {
-            var movie = await _movieRepository.GetAsync(id);
-            if(movie == null)
-            {
-                throw new Exception($"Movie with id {id} does not exist.");
-            }
+            var movie = await _movieRepository.SafeGetAsync(id);
             movie.SetDescription(description);
             await _movieRepository.UpdateAsync(movie);
         }

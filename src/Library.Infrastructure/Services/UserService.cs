@@ -2,6 +2,7 @@
 using Library.Core.Models;
 using Library.Core.Repositories;
 using Library.Infrastructure.DTO;
+using Library.Infrastructure.Extentions;
 using Library.Infrastructure.IServices;
 using System;
 using System.Collections.Generic;
@@ -31,11 +32,7 @@ namespace Library.Infrastructure.Services
 
         public async Task<TokenDTO> LoginAsync(string email, string password)
         {
-            var user = await _userRepository.GetAsync(email);
-            if (user == null)
-            {
-                throw new Exception("Invalid credentials");
-            }
+            var user = await _userRepository.SafeGetAsync(email);
             if (user.Password != password)
             {
                 throw new Exception("Invalid credentials");
