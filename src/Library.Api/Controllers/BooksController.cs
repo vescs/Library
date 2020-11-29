@@ -1,4 +1,5 @@
-﻿using Library.Infrastructure.Commands.Books;
+﻿using Library.Infrastructure.Commands;
+using Library.Infrastructure.Commands.Books;
 using Library.Infrastructure.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,9 @@ namespace Library.Api.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookService _bookService;
-        public BooksController(IBookService bookService)
+        
+        public BooksController(IBookService bookService, ICommandDispatcher commandDispatcher) 
+            : base(commandDispatcher)
         {
             _bookService = bookService;
         }
@@ -56,16 +59,14 @@ namespace Library.Api.Controllers
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Post([FromBody]CreateBook command)
         {
-            command.Id = Guid.NewGuid();
-            await _bookService.CreateAsync(command.Id, command.Title, command.Description, command.Author, 
-                command.Pages, command.PublishingHouse, command.Quantity, command.PremiereDate);
+            await CommandDispatcher.DispatchAsync(command);
             return Created($"/books/{command.Id}", null);
         }
-        [HttpPut("{id}")]
+        [HttpPut("{command.Id}")]
         [Authorize(Policy = "IsAdmin")]
-        public async Task<IActionResult> Put([FromBody]UpdateBook command, Guid id)
+        public async Task<IActionResult> Put([FromBody]UpdateBook command)
         {
-            await _bookService.UpdateAsync(id, command.Title, command.Description);
+            await CommandDispatcher.DispatchAsync(command);
             return NoContent();
         }
         [HttpPut("lend/{id}")]

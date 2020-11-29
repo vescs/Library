@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Library.Infrastructure.Commands.Events
 {
-    public class AddTickets
+    public class AddTickets : ICommand
     {
         public Guid EventId { get; set; }
         public int Amount { get; set; }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Library.Infrastructure.Commands.Users
 {
-    public class Register
+    public class Register : ICommand
     {
         public Guid UserId { get; set; }
         public string Role { get; set; }

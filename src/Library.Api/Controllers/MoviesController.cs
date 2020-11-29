@@ -1,4 +1,5 @@
-﻿using Library.Infrastructure.Commands.Movies;
+﻿using Library.Infrastructure.Commands;
+using Library.Infrastructure.Commands.Movies;
 using Library.Infrastructure.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,8 @@ namespace Library.Api.Controllers
     public class MoviesController : ControllerBase
     {
         private readonly IMovieService _movieService;
-        public MoviesController(IMovieService movieService)
+        public MoviesController(IMovieService movieService, ICommandDispatcher commandDispatcher)
+            : base(commandDispatcher)
         {
             _movieService = movieService;
         }
@@ -37,21 +39,19 @@ namespace Library.Api.Controllers
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Post([FromBody]CreateMovie command)
         {
-            command.Id = Guid.NewGuid();
-            await _movieService.CreateAsync(command.Id, command.Title, command.Description, command.Director, 
-                command.Length, command.Quantity, command.PremiereDate);
+            await CommandDispatcher.DispatchAsync(command);
             return Created($"/movies/{command.Id}", null);
         }
         [HttpPut]
         [Authorize(Policy = "IsAdmin")]
-        public async Task<IActionResult> Put([FromBody]UpdateMovie command, Guid id)
+        public async Task<IActionResult> Put([FromBody]UpdateMovie command)
         {
-            var movie = await _movieService.GetAsync(id);
-            if(movie == null)
+            var movie = await _movieService.GetAsync(command.Id);
+            if (movie == null)
             {
                 return NotFound();
             }
-            await _movieService.UpdateAsync(id, command.Description);
+            await CommandDispatcher.DispatchAsync(command);
             return NoContent();
         }
         [HttpPut("lend/{id}")]

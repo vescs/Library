@@ -1,4 +1,5 @@
-﻿using Library.Infrastructure.Commands.Events;
+﻿using Library.Infrastructure.Commands;
+using Library.Infrastructure.Commands.Events;
 using Library.Infrastructure.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,8 @@ namespace Library.Api.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventService _eventService;
-        public EventsController(IEventService eventService)
+        public EventsController(IEventService eventService, ICommandDispatcher commandDispatcher)
+            : base(commandDispatcher)
         {
             _eventService = eventService;
         }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Library.Infrastructure.Commands.Events
 {
-    public class UpdateEvent
+    public class UpdateEvent : ICommand
     {
         public string Description { get; set; }
     }

@@ -1,4 +1,5 @@
-﻿using Library.Infrastructure.Commands.Users;
+﻿using Library.Infrastructure.Commands;
+using Library.Infrastructure.Commands.Users;
 using Library.Infrastructure.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,8 @@ namespace Library.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, ICommandDispatcher commandDispatcher)
+            : base(commandDispatcher)
         {
             _userService = userService;
         }
@@ -25,8 +27,7 @@ namespace Library.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Post([FromBody]Register command)
         {
-            await _userService.RegisterAsync(Guid.NewGuid(), command.Email, command.Username, command.Password, 
-                command.FirstName, command.LastName, command.Role);
+            await CommandDispatcher.DispatchAsync(command);
             return Created("/account", null);
         }
         [HttpPost("login")]

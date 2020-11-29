@@ -1,4 +1,5 @@
-﻿using Library.Infrastructure.Commands.Newspapers;
+﻿using Library.Infrastructure.Commands;
+using Library.Infrastructure.Commands.Newspapers;
 using Library.Infrastructure.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,8 @@ namespace Library.Api.Controllers
     public class NewspapersController : ControllerBase
     {
         private readonly INewspaperService _newspaperService;
-        public NewspapersController(INewspaperService newspaperService)
+        public NewspapersController(INewspaperService newspaperService, ICommandDispatcher commandDispatcher)
+            : base(commandDispatcher)
         {
             _newspaperService = newspaperService;
         }
@@ -36,15 +38,14 @@ namespace Library.Api.Controllers
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Post([FromBody]CreateNewspaper command)
         {
-            command.Id = Guid.NewGuid();
-            await _newspaperService.CreateAsync(command.Id, command.Title, command.Description, command.Type, command.Quantity, command.ReleaseDate);
+            await CommandDispatcher.DispatchAsync(command);
             return Created($"newspapers/{command.Id}", null);
         }
-        [HttpPut("{id}")]
+        [HttpPut("{command.Id}")]
         [Authorize(Policy = "IsAdmin")]
-        public async Task<IActionResult> Put([FromBody]UpdateNewspaper command, Guid id)
+        public async Task<IActionResult> Put([FromBody]UpdateNewspaper command)
         {
-            await _newspaperService.UpdateAsync(id, command.Description);
+            await CommandDispatcher.DispatchAsync(command);
             return NoContent();
         }
         [HttpPut("lend/{id}")]

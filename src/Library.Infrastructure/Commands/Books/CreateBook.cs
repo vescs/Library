@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Library.Infrastructure.Commands.Books
 {
-    public class CreateBook
+    public class CreateBook : ICommand
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

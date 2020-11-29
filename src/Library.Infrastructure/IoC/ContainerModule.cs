@@ -16,6 +16,7 @@ namespace Library.Infrastructure.IoC
                 .SingleInstance();
             builder.RegisterModule<RepositoryModule>();
             builder.RegisterModule<ServiceModule>();
+            builder.RegisterModule<CommandModule>();
         }
     }
 }

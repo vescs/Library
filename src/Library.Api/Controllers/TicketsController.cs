@@ -1,4 +1,5 @@
-﻿using Library.Infrastructure.IServices;
+﻿using Library.Infrastructure.Commands;
+using Library.Infrastructure.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,7 +12,8 @@ namespace Library.Api.Controllers
     public class TicketsController : ControllerBase
     {
         private readonly ITicketService _ticketService;
-        public TicketsController(ITicketService ticketService)
+        public TicketsController(ITicketService ticketService, ICommandDispatcher commandDispatcher)
+            : base(commandDispatcher)
         {
             _ticketService = ticketService;
         }
