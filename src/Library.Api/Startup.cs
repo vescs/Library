@@ -1,6 +1,6 @@
 using Autofac;
-using Library.Core.Repositories;
 using Library.Infrastructure.AutoMapper;
+using Library.Infrastructure.IoC;
 using Library.Infrastructure.IServices;
 using Library.Infrastructure.Repositories;
 using Library.Infrastructure.Services;
@@ -44,7 +44,7 @@ namespace Library.Api
         public void ConfigureServices(IServiceCollection services)
         {
             //automapper
-            services.AddSingleton(AutoMapperConfiguration.Initialize());
+            //services.AddSingleton(AutoMapperConfiguration.Initialize());
             //formatting
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.Formatting = Formatting.Indented);
 
@@ -99,22 +99,23 @@ namespace Library.Api
         //Autofac
         public void ConfigureContainer(ContainerBuilder builder)
         {
+            builder.RegisterModule(new ContainerModule());
             //repos
-            builder.RegisterType<InMemoryBookRepository>().As<IBookRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<InMemoryNewspaperRepository>().As<INewspaperRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<InMemoryEventRepository>().As<IEventRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<InMemoryMovieRepository>().As<IMovieRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<InMemoryUserRepository>().As<IUserRepository>().InstancePerLifetimeScope();
+            //builder.RegisterType<InMemoryBookRepository>().As<IBookRepository>().InstancePerLifetimeScope();
+            //builder.RegisterType<InMemoryNewspaperRepository>().As<INewspaperRepository>().InstancePerLifetimeScope();
+            //builder.RegisterType<InMemoryEventRepository>().As<IEventRepository>().InstancePerLifetimeScope();
+            //builder.RegisterType<InMemoryMovieRepository>().As<IMovieRepository>().InstancePerLifetimeScope();
+            //builder.RegisterType<InMemoryUserRepository>().As<IUserRepository>().InstancePerLifetimeScope();
 
             //services
-            builder.RegisterType<BookService>().As<IBookService>().InstancePerLifetimeScope();
-            builder.RegisterType<NewspaperService>().As<INewspaperService>().InstancePerLifetimeScope();
-            builder.RegisterType<EventService>().As<IEventService>().InstancePerLifetimeScope();
-            builder.RegisterType<MovieService>().As<IMovieService>().InstancePerLifetimeScope();
-            builder.RegisterType<DataInitializer>().As<IDataInitializer>().InstancePerLifetimeScope();
-            builder.RegisterType<JwtHandler>().As<IJwtHandler>().SingleInstance();
-            builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
-            builder.RegisterType<TicketService>().As<ITicketService>().InstancePerLifetimeScope();
+            //builder.RegisterType<BookService>().As<IBookService>().InstancePerLifetimeScope();
+            //builder.RegisterType<NewspaperService>().As<INewspaperService>().InstancePerLifetimeScope();
+            //builder.RegisterType<EventService>().As<IEventService>().InstancePerLifetimeScope();
+            //builder.RegisterType<MovieService>().As<IMovieService>().InstancePerLifetimeScope();
+            //builder.RegisterType<DataInitializer>().As<IDataInitializer>().InstancePerLifetimeScope();
+            //builder.RegisterType<JwtHandler>().As<IJwtHandler>().SingleInstance();
+            //builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
+            //builder.RegisterType<TicketService>().As<ITicketService>().InstancePerLifetimeScope();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

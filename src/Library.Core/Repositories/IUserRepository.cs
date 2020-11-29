@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.Core.Repositories
 {
-    public interface IUserRepository
+    public interface IUserRepository : IRepository
     {
         Task AddAsync(User user);
         Task<IEnumerable<User>> BrowseAsync(string username = "");

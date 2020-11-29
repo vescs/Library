@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.Infrastructure.IServices
 {
-    public interface ITicketService
+    public interface ITicketService : IService
     {
         Task<IEnumerable<TicketDTO>> GetForUserAsync(Guid userId);
         Task<TicketDetailsDTO> GetAsync(Guid userId, Guid eventId, Guid ticketId);

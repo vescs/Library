@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.Core.Repositories
 {
-    public interface IBookRepository
+    public interface IBookRepository : IRepository
     {
         Task AddAsync(Book book);
         Task<IEnumerable<Book>> BrowseAsync(string title = "");

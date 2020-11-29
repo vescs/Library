@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Library.Infrastructure.IServices
 {
-    public interface IJwtHandler
+    public interface IJwtHandler : IService
     {
         JwtDTO CreateToken(Guid userId, string role);
     }

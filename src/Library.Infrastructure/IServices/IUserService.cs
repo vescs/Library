@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.Infrastructure.IServices
 {
-    public interface IUserService
+    public interface IUserService : IService
     {
         Task<UserDTO> GetUserInfoAsync(Guid id);
         Task RegisterAsync(Guid id, string email, string name, string password, 

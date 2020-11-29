@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.Infrastructure.IServices
 {
-    public interface IEventService
+    public interface IEventService : IService
     {
         Task AddTicketsAsync(Guid eventId, int amount, decimal price, bool seat);
         Task CreateAsync(Guid id, string name, string description, DateTime startDate, DateTime endDate);

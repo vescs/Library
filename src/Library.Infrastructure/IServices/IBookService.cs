@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Library.Infrastructure.IServices
 {
-    public interface IBookService
+    public interface IBookService : IService
     {
         Task CreateAsync(Guid id, string title, string description, string author, 
             int pages, string publishingHouse, int quantity, DateTime premiereDate);

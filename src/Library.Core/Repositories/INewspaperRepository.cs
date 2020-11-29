@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.Core.Repositories
 {
-    public interface INewspaperRepository
+    public interface INewspaperRepository : IRepository
     {
         Task AddAsync(Newspaper newspaper);
         Task<IEnumerable<Newspaper>> BrowseAsync(string title = "");

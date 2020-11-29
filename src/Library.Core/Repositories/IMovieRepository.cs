@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.Core.Repositories
 {
-    public interface IMovieRepository
+    public interface IMovieRepository : IRepository
     {
         Task AddAsync(Movie movie);
         Task<IEnumerable<Movie>> BrowseAsync(string name = "");

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.Infrastructure.IServices
 {
-    public interface INewspaperService
+    public interface INewspaperService : IService
     {
         Task CreateAsync(Guid id, string title, string description, string type, int quantity, DateTime releaseDate);
         Task<NewspaperDetailsDTO> GetAsync(Guid id);
