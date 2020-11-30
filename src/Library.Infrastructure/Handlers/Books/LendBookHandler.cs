@@ -17,7 +17,7 @@ namespace Library.Infrastructure.Handlers.Books
         }
         public async Task HandleAsync(LendBook command)
         {
-            await _bookService.LendAsync(command.BookId, command.UserId);
+            await _bookService.LendAsync(command.Id, command.UserId);
         }
     }
 }

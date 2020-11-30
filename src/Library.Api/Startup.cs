@@ -76,8 +76,10 @@ namespace Library.Api
                     }
                 });
             });
-            services.AddAuthorization(x => x.AddPolicy("IsAdmin", p => p.RequireRole("admin")));
+
             //jwt
+            services.AddAuthorization(x => x.AddPolicy("IsAdmin", p => p.RequireRole("admin")));
+            
             var jwtSettings = new JwtSettings();
             Configuration.GetSection("jwt").Bind(jwtSettings);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

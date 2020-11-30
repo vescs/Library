@@ -17,7 +17,7 @@ namespace Library.Infrastructure.Handlers.Books
         }
         public async Task HandleAsync(ReturnBook command)
         {
-            await _bookService.ReturnAsync(command.BookId, command.UserId);
+            await _bookService.ReturnAsync(command.Id, command.UserId);
         }
     }
 }

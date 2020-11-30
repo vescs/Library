@@ -71,14 +71,14 @@ namespace Library.Api.Controllers
         }
         [HttpPut("lend")]
         [Authorize]
-        public async Task<IActionResult> PutLend([FromBody]LendBook command)
+        public async Task<IActionResult> Put([FromBody]LendBook command)
         {
             await DispatchAsync(command);
             return NoContent();
         }
         [HttpPut("return")]
         [Authorize]
-        public async Task<IActionResult> PutReturn([FromBody]ReturnBook command)
+        public async Task<IActionResult> Put([FromBody]ReturnBook command)
         {
             await DispatchAsync(command);
             return NoContent();

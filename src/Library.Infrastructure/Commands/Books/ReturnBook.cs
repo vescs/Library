@@ -6,6 +6,6 @@ namespace Library.Infrastructure.Commands.Books
 {
     public class ReturnBook : AuthenticatedCommandBase
     {
-        public Guid BookId { get; set; }
+        public Guid Id { get; set; }
     }
 }
