@@ -124,7 +124,12 @@ namespace Library.Core.Models
             {
                 throw new Exception("Quantity has to be greater than zero.");
             }
+            if (AvailableMovies < quantity)
+            {
+                throw new Exception("Quantity of movies you want to cancel is bigger than quantity of movies you can cancel.");
+            }
             Quantity -= quantity;
+
             Update();
         }
         public void Lend(User user)
