@@ -59,42 +59,42 @@ namespace Library.Api.Controllers
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Post([FromBody]CreateBook command)
         {
-            await CommandDispatcher.DispatchAsync(command);
+            await DispatchAsync(command);
             return Created($"/books/{command.Id}", null);
         }
-        [HttpPut("{command.Id}")]
+        [HttpPut("update")]
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Put([FromBody]UpdateBook command)
         {
-            await CommandDispatcher.DispatchAsync(command);
+            await DispatchAsync(command);
             return NoContent();
         }
-        [HttpPut("lend/{id}")]
+        [HttpPut("lend")]
         [Authorize]
-        public async Task<IActionResult> PutLend(Guid id)
+        public async Task<IActionResult> PutLend([FromBody]LendBook command)
         {
-            await _bookService.LendAsync(id, UserId);
+            await DispatchAsync(command);
             return NoContent();
         }
-        [HttpPut("return/{id}")]
+        [HttpPut("return")]
         [Authorize]
-        public async Task<IActionResult> PutReturn(Guid id)
+        public async Task<IActionResult> PutReturn([FromBody]ReturnBook command)
         {
-            await _bookService.ReturnAsync(id, UserId);
+            await DispatchAsync(command);
             return NoContent();
         }
-        [HttpPut("add/{id}/{quantity}")]
+        [HttpPut("add")]
         [Authorize(Policy = "IsAdmin")]
-        public async Task<IActionResult> PutAdd(Guid id, int quantity)
+        public async Task<IActionResult> Put([FromBody]AddBook command)
         {
-            await _bookService.IncreaseQuantityAsync(id, quantity);
+            await DispatchAsync(command);
             return NoContent();
         }
-        [HttpPut("remove/{id}/{quantity}")]
+        [HttpPut("remove")]
         [Authorize(Policy = "IsAdmin")]
-        public async Task<IActionResult> PutRemove(Guid id, int quantity)
+        public async Task<IActionResult> Put([FromBody]RemoveBook command)
         {
-            await _bookService.DecreaseQuantityAsync(id, quantity);
+            await DispatchAsync(command);
             return NoContent();
         }
     }
