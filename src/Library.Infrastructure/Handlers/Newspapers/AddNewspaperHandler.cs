@@ -8,21 +8,18 @@ using System.Threading.Tasks;
 
 namespace Library.Infrastructure.Handlers.Newspapers
 {
-    public class CreateNewspaperHandler : ICommandHandler<CreateNewspaper>
+    public class AddNewspaperHandler : ICommandHandler<AddNewspaper>
     {
         private readonly INewspaperService _newspaperService;
 
-        public CreateNewspaperHandler(INewspaperService newspaperService)
+        public AddNewspaperHandler(INewspaperService newspaperService)
         {
             _newspaperService = newspaperService;
         }
 
-        public async Task HandleAsync(CreateNewspaper command)
+        public async Task HandleAsync(AddNewspaper command)
         {
-            command.Id = Guid.NewGuid();
-            await _newspaperService.CreateAsync(command.Id, command.Title, command.Description, 
-                command.Type, command.Quantity, command.ReleaseDate);
-
+            await _newspaperService.IncreaseQuantityAsync(command.Id, command.Quantity);
         }
     }
 }

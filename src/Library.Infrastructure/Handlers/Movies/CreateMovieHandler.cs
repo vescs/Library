@@ -11,10 +11,12 @@ namespace Library.Infrastructure.Handlers.Movies
     public class CreateMovieHandler : ICommandHandler<CreateMovie>
     {
         private readonly IMovieService _movieService;
+
         public CreateMovieHandler(IMovieService movieService)
         {
             _movieService = movieService;
         }
+
         public async Task HandleAsync(CreateMovie command)
         {
             command.Id = Guid.NewGuid();

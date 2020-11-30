@@ -8,19 +8,18 @@ using System.Threading.Tasks;
 
 namespace Library.Infrastructure.Handlers.Movies
 {
-    public class UpdateMovieHandler : ICommandHandler<UpdateMovie>
+    public class RemoveMovieHandler : ICommandHandler<RemoveMovie>
     {
         private readonly IMovieService _movieService;
 
-        public UpdateMovieHandler(IMovieService movieService)
+        public RemoveMovieHandler(IMovieService movieService)
         {
             _movieService = movieService;
         }
 
-        public async Task HandleAsync(UpdateMovie command)
+        public async Task HandleAsync(RemoveMovie command)
         {
-            await _movieService.UpdateAsync(command.Id, command.Description);
-
+            await _movieService.DecreaseQuantityAsync(command.Id, command.Quantity);
         }
     }
 }

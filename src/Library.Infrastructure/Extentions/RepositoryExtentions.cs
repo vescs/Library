@@ -41,7 +41,7 @@ namespace Library.Infrastructure.Extentions
             var newspaper = await newspaperRepository.GetAsync(id);
             if (newspaper == null)
             {
-                throw new Exception($"Movie with id '{id}' does not exist.");
+                throw new Exception($"Newspaper with id '{id}' does not exist.");
             }
             return newspaper;
         }

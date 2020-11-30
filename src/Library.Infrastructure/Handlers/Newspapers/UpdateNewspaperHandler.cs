@@ -11,10 +11,12 @@ namespace Library.Infrastructure.Handlers.Newspapers
     public class UpdateNewspaperHandler : ICommandHandler<UpdateNewspaper>
     {
         private readonly INewspaperService _newspaperService;
+
         public UpdateNewspaperHandler(INewspaperService newspaperService)
         {
             _newspaperService = newspaperService;
         }
+
         public async Task HandleAsync(UpdateNewspaper command)
         {
             await _newspaperService.UpdateAsync(command.Id, command.Description);
