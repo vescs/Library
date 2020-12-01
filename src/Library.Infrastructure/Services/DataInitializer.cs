@@ -27,8 +27,8 @@ namespace Library.Infrastructure.Services
         public async Task SeedAsync()
         {
             List<Task> tasks = new List<Task>();
-            tasks.Add(_userService.RegisterAsync(Guid.NewGuid(), "user", "Name", "string", "FirstName", "LastName"));
-            tasks.Add(_userService.RegisterAsync(Guid.NewGuid(), "admin", "Name", "string", "FirstName", "LastName", "admin"));
+            tasks.Add(_userService.RegisterAsync(Guid.NewGuid(), "user@dx.com", "Name", "string", "FirstName", "LastName"));
+            tasks.Add(_userService.RegisterAsync(Guid.NewGuid(), "admin@dx.com", "Name", "string", "FirstName", "LastName", "admin"));
             for (int i = 0; i < 10; i++)
             {
                 tasks.Add(_bookService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}", 

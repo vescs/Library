@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Library.Core.Models
 {
@@ -49,9 +50,17 @@ namespace Library.Core.Models
         }
         public void SetEmail(string email)
         {
+            Regex mailRegex = new Regex(@"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*"
+                                + "@"
+                                + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$");
+
             if (string.IsNullOrWhiteSpace(email))
             {
                 throw new Exception($"Email can't be empty.");
+            }
+            if (!mailRegex.IsMatch(email))
+            {
+                throw new Exception($"Invalid email. Please enter correct one.");
             }
             if(email == Email)
             {
@@ -62,9 +71,9 @@ namespace Library.Core.Models
         }
         public void SetPassword(string password, string salt)
         {
-            if (string.IsNullOrWhiteSpace(password) || password.Length < 5 || password.Length < 50)
+            if (string.IsNullOrWhiteSpace(password) || password.Length < 5)
             {
-                throw new Exception($"Given password is invalid. Please enter password longer than 4 characters and shorter than 50.");
+                throw new Exception($"Given password is invalid. Please enter password longer than 4 characters.");
             }
             if (string.IsNullOrWhiteSpace(salt))
             {
