@@ -14,6 +14,7 @@ namespace Library.Core.Models
         public string Username { get; protected set; }
         public string Email { get; protected set; }
         public string Password { get; protected set; }
+        public string Salt { get; protected set; }
         public string Role { get; protected set; }
         public string FirstName { get; protected set; }
         public string LastName { get; protected set; }
@@ -21,12 +22,12 @@ namespace Library.Core.Models
         public DateTime UpdatedAt { get; protected set; }
 
         protected User() { }
-        public User(Guid id, string username, string email, string password, string role, string firstName, string lastName)
+        public User(Guid id, string username, string email, string password, string salt, string role, string firstName, string lastName)
         {
             Id = id;
             SetUsername(username);
             SetEmail(email);
-            SetPassword(password);
+            SetPassword(password, salt);
             SetRole(role);
             SetFirstName(firstName);
             SetLastName(lastName);
@@ -59,17 +60,22 @@ namespace Library.Core.Models
             Email = email;
             Update();
         }
-        public void SetPassword(string password)
+        public void SetPassword(string password, string salt)
         {
-            if (string.IsNullOrWhiteSpace(password) || password.Length < 5)
+            if (string.IsNullOrWhiteSpace(password) || password.Length < 5 || password.Length < 50)
             {
-                throw new Exception($"Given password is invalid. Please enter password longer than 4 characters.");
+                throw new Exception($"Given password is invalid. Please enter password longer than 4 characters and shorter than 50.");
             }
-            if(password == Password)
+            if (string.IsNullOrWhiteSpace(salt))
+            {
+                throw new Exception("Salt can not be empty.");
+            }
+            if (password == Password)
             {
                 return;
             }
             Password = password;
+            Salt = salt;
             Update();
         }
         public void SetRole(string role)

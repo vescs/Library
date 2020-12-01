@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Library.Infrastructure.Commands.Events
 {
-    public class CreateEvent : ICommand
+    public class CreateEvent : CreateCommandBase
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }

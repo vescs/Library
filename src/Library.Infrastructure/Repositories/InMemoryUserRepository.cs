@@ -10,11 +10,7 @@ namespace Library.Infrastructure.Repositories
 {
     public class InMemoryUserRepository : IUserRepository
     {
-        private static ISet<User> _users = new HashSet<User>()
-        {
-            new User(Guid.NewGuid(), "User", "user@user.com", "secret", "user", "User", "User"),
-            new User(Guid.NewGuid(), "Admin", "admin@admin.com", "secret", "admin", "Admin", "Admin"),
-        };
+        private static ISet<User> _users = new HashSet<User>();
         public async Task AddAsync(User user)
         {
             _users.Add(user);

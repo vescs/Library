@@ -8,9 +8,10 @@ namespace Library.Infrastructure.IServices
 {
     public interface IUserService : IService
     {
+        Task<UserDTO> GetUser(string email);
         Task<UserDTO> GetUserInfoAsync(Guid id);
-        Task RegisterAsync(Guid id, string email, string name, string password, 
+        Task RegisterAsync(Guid id, string email, string username, string password, 
             string firstName, string lastName, string role = "user");
-        Task<TokenDTO> LoginAsync(string email, string password);
+        Task LoginAsync(string email, string password);
     }
 }

@@ -5,9 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace Library.Infrastructure.Commands
 {
-    public abstract class AuthenticatedCommandBase : IAuthenticatedCommand
+    public abstract class CreateCommandBase : ICommand
     {
         [JsonIgnore]
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
     }
 }

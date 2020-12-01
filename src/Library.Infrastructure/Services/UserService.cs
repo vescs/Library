@@ -16,12 +16,20 @@ namespace Library.Infrastructure.Services
         private readonly IUserRepository _userRepository;
         private readonly IJwtHandler _jwtHandler;
         private readonly IMapper _mapper;
+        private readonly IEncrypter _encrypter;
         
-        public UserService(IUserRepository userRepository, IJwtHandler jwtHandler, IMapper mapper)
+        public UserService(IUserRepository userRepository, IJwtHandler jwtHandler, IMapper mapper, IEncrypter encrypter)
         {
             _userRepository = userRepository;
             _jwtHandler = jwtHandler;
             _mapper = mapper;
+            _encrypter = encrypter;
+        }
+
+        public async Task<UserDTO> GetUser(string email)
+        {
+            var user = await _userRepository.GetAsync(email);
+            return _mapper.Map<UserDTO>(user);
         }
 
         public async Task<UserDTO> GetUserInfoAsync(Guid id)
@@ -30,20 +38,14 @@ namespace Library.Infrastructure.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        public async Task<TokenDTO> LoginAsync(string email, string password)
+        public async Task LoginAsync(string email, string password)
         {
             var user = await _userRepository.SafeGetAsync(email);
-            if (user.Password != password)
+            var hash = _encrypter.GetHash(password, user.Salt);
+            if (user.Password != hash)
             {
                 throw new Exception("Invalid credentials");
             }
-            var jwt = _jwtHandler.CreateToken(user.Id, user.Role);
-            return new TokenDTO
-            {
-                Token = jwt.Token,
-                Expires = jwt.Expires,
-                Role = user.Role
-            };
         }
 
         public async Task RegisterAsync(Guid id, string email, string username, string password, 
@@ -59,7 +61,9 @@ namespace Library.Infrastructure.Services
             {
                 throw new Exception($"User with email: '{email}' already exists.");
             }
-            user = new User(id, username, email, password, role, firstName, lastName);
+            var salt = _encrypter.GetSalt(password);
+            var hash = _encrypter.GetHash(password, salt);
+            user = new User(id, username, email, hash, salt, role, firstName, lastName);
             await _userRepository.AddAsync(user);
         }
     }

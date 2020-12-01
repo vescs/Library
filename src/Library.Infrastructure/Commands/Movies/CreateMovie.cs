@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Library.Infrastructure.Commands.Movies
 {
-    public class CreateMovie : ICommand
+    public class CreateMovie : CreateCommandBase
     {
-        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Director { get; set; }

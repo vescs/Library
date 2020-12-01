@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Library.Infrastructure.IServices;
+using Library.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -17,6 +18,8 @@ namespace Library.Infrastructure.IoC.Modules
                 .Where(x => x.IsAssignableTo<IService>())
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
+            
+            builder.RegisterType<Encrypter>().As<IEncrypter>().SingleInstance();
         }
     }
 }

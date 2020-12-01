@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Library.Infrastructure.Commands.Newspapers
 {
-    public class CreateNewspaper : ICommand
+    public class CreateNewspaper : CreateCommandBase
     {
-        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }

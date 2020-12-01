@@ -12,17 +12,23 @@ namespace Library.Infrastructure.Services
         private readonly IEventService _eventService;
         private readonly INewspaperService _newspaperService;
         private readonly IMovieService _movieService;
+        private readonly IUserService _userService;
+
         public DataInitializer(IBookService bookService, IEventService eventService, 
-            INewspaperService newspaperService, IMovieService movieService)
+            INewspaperService newspaperService, IMovieService movieService, IUserService userService)
         {
             _bookService = bookService;
             _eventService = eventService;
             _movieService = movieService;
             _newspaperService = newspaperService;
+            _userService = userService;
         }
+
         public async Task SeedAsync()
         {
             List<Task> tasks = new List<Task>();
+            tasks.Add(_userService.RegisterAsync(Guid.NewGuid(), "user", "Name", "string", "FirstName", "LastName"));
+            tasks.Add(_userService.RegisterAsync(Guid.NewGuid(), "admin", "Name", "string", "FirstName", "LastName", "admin"));
             for (int i = 0; i < 10; i++)
             {
                 tasks.Add(_bookService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}", 

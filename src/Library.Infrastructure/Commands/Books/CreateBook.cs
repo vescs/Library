@@ -4,9 +4,8 @@ using System.Text;
 
 namespace Library.Infrastructure.Commands.Books
 {
-    public class CreateBook : ICommand
+    public class CreateBook : CreateCommandBase
     {
-        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Author { get; set; }
         public string Description { get; set; }
