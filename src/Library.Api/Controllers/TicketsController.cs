@@ -1,4 +1,5 @@
 ﻿using Library.Infrastructure.Commands;
+using Library.Infrastructure.Commands.Tickets;
 using Library.Infrastructure.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +13,13 @@ namespace Library.Api.Controllers
     public class TicketsController : ControllerBase
     {
         private readonly ITicketService _ticketService;
+
         public TicketsController(ITicketService ticketService, ICommandDispatcher commandDispatcher)
             : base(commandDispatcher)
         {
             _ticketService = ticketService;
         }
+
         [HttpGet("{ticketId}")]
         [Authorize]
         public async Task<IActionResult> Get(Guid eventId, Guid ticketId)
@@ -29,18 +32,20 @@ namespace Library.Api.Controllers
 
             return Json(ticket);
         }
-        [HttpPost("purchase/{amount}")]
+
+        [HttpPost("purchase")]
         [Authorize]
-        public async Task<IActionResult> Post(Guid eventId, int amount, bool seat)
+        public async Task<IActionResult> Post([FromBody] PurchaseTickets command)
         {
-            await _ticketService.PurchaseAsync(UserId, eventId, amount, seat);
+            await DispatchAsync(command);
             return NoContent();
         }
-        [HttpDelete("cancel/{amount}")]
+
+        [HttpDelete("cancel")]
         [Authorize]
-        public async Task<IActionResult> Delete(Guid eventId, int amount, bool seat)
+        public async Task<IActionResult> Delete([FromBody]CancelTickets command)
         {
-            await _ticketService.CancelAsync(UserId, eventId, amount, seat);
+            await DispatchAsync(command);
             return NoContent();
         }
     }

@@ -13,17 +13,20 @@ namespace Library.Api.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventService _eventService;
+
         public EventsController(IEventService eventService, ICommandDispatcher commandDispatcher)
             : base(commandDispatcher)
         {
             _eventService = eventService;
         }
+
         [HttpGet]
         public async Task<IActionResult> Get(string name = "")
         {
             var events = await _eventService.BrowseAsync(name);
             return Json(events);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -34,6 +37,7 @@ namespace Library.Api.Controllers
             }
             return Json(@event);
         }
+
         [HttpGet("title/{title}")]
         public async Task<IActionResult> GetTitle(string title)
         {
@@ -44,50 +48,39 @@ namespace Library.Api.Controllers
             }
             return Json(@event);
         }
-        [HttpPost]
-        [Authorize(Policy = "IsAdmin")]
-        public async Task<IActionResult> Post([FromBody]CreateEvent command)
-        {
-            command.Id = Guid.NewGuid();
-            await _eventService.CreateAsync(command.Id, command.Name, command.Description, 
-                command.StartDate, command.EndDate);
-            return Created($"/events/{command.Id}", null);
-        }
-        [HttpPut]
-        [Authorize(Policy = "IsAdmin")]
-        public async Task<IActionResult> Put([FromBody]UpdateEvent command, Guid id)
-        {
-            var @event = await _eventService.GetAsync(id);
-            if (@event == null)
-            {
-                return NotFound();
-            }
-            await _eventService.UpdateAsync(id, command.Description);
-            return NoContent();
-        }
-        [HttpPut("command.EventId/add")]
-        [Authorize(Policy = "IsAdmin")]
-        public async Task<IActionResult> Put([FromBody]AddTickets command)
-        {
-            var @event = await _eventService.GetAsync(command.EventId);
-            if (@event == null)
-            {
-                return NotFound();
-            }
-            await _eventService.AddTicketsAsync(command.EventId, command.Amount, command.Price, command.Seat);
-            return NoContent();
-        }
+
         [HttpDelete]
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var @event = await _eventService.GetAsync(id);
-            if (@event == null)
-            {
-                return NotFound();
-            }
             await _eventService.DeleteAsync(id);
             return NoContent();
         }
+
+        [HttpPost]
+        [Authorize(Policy = "IsAdmin")]
+        public async Task<IActionResult> Post([FromBody]CreateEvent command)
+        {
+            await DispatchAsync(command);
+            return Created($"/events/{command.Id}", null);
+        }
+
+        [HttpPut]
+        [Authorize(Policy = "IsAdmin")]
+        public async Task<IActionResult> Put([FromBody]UpdateEvent command)
+        {
+            await DispatchAsync(command);
+            return NoContent();
+        }
+
+        [HttpPut("addtickets")]
+        [Authorize(Policy = "IsAdmin")]
+        public async Task<IActionResult> Put([FromBody]AddTickets command)
+        {
+            await DispatchAsync(command);
+            return NoContent();
+        }
+
+
     }
 }

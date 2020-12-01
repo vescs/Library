@@ -55,6 +55,7 @@ namespace Library.Api.Controllers
             await _bookService.DeleteAsync(id);
             return NoContent();
         }
+
         [HttpPost]
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Post([FromBody]CreateBook command)
@@ -62,6 +63,7 @@ namespace Library.Api.Controllers
             await DispatchAsync(command);
             return Created($"/books/{command.Id}", null);
         }
+
         [HttpPut("update")]
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Put([FromBody]UpdateBook command)
@@ -69,6 +71,7 @@ namespace Library.Api.Controllers
             await DispatchAsync(command);
             return NoContent();
         }
+
         [HttpPut("lend")]
         [Authorize]
         public async Task<IActionResult> Put([FromBody]LendBook command)
@@ -76,6 +79,7 @@ namespace Library.Api.Controllers
             await DispatchAsync(command);
             return NoContent();
         }
+
         [HttpPut("return")]
         [Authorize]
         public async Task<IActionResult> Put([FromBody]ReturnBook command)
@@ -83,6 +87,7 @@ namespace Library.Api.Controllers
             await DispatchAsync(command);
             return NoContent();
         }
+
         [HttpPut("add")]
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Put([FromBody]AddBook command)
@@ -90,6 +95,7 @@ namespace Library.Api.Controllers
             await DispatchAsync(command);
             return NoContent();
         }
+
         [HttpPut("remove")]
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> Put([FromBody]RemoveBook command)
