@@ -130,5 +130,18 @@ namespace Library.Core.Models
         {
             UpdatedAt = DateTime.UtcNow;
         }
+        public override bool Equals(object obj)
+        {
+            User tempUser = obj as User;
+            if(tempUser == null)
+            {
+                return false;
+            }
+            return tempUser.Id == this.Id;
+        }
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
     }
 }

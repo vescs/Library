@@ -168,11 +168,11 @@ namespace Library.Core.Models
         }
         public void Return(User user)
         {
-            if (!_users.Any(x => x.Id == user.Id))
+            if (!_users.Contains(user))
             {
                 throw new Exception("There is nothing to return.");
             }
-            _users.Remove(_users.FirstOrDefault(x => x.Id == user.Id));
+            _users.Remove(user);
             Update();
         }
         private void Update()
