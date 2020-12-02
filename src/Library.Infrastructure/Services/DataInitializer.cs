@@ -29,15 +29,15 @@ namespace Library.Infrastructure.Services
             List<Task> tasks = new List<Task>();
             tasks.Add(_userService.RegisterAsync(Guid.NewGuid(), "user@dx.com", "Name", "string", "FirstName", "LastName"));
             tasks.Add(_userService.RegisterAsync(Guid.NewGuid(), "admin@dx.com", "Name", "string", "FirstName", "LastName", "admin"));
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 60; i++)
             {
+                Guid id = Guid.NewGuid();
+                await _eventService.CreateAsync(id, $"Name {i}", $"Description {i}",
+                DateTime.UtcNow.AddDays(i), DateTime.UtcNow.AddDays(i).AddHours(i));
+                await _eventService.AddTicketsAsync(id, 5, 15, true);
+                await _eventService.AddTicketsAsync(id, 5, 10, false);
                 tasks.Add(_bookService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}", 
                     $"Author {i}", i + 100, $"House {i}", 5, DateTime.UtcNow.AddDays(-i)));
-                Guid id = Guid.NewGuid();
-                tasks.Add(_eventService.CreateAsync(id, $"Name {i}", $"Description {i}",
-                    DateTime.UtcNow.AddDays(-i), DateTime.UtcNow.AddDays(i)));
-                tasks.Add(_eventService.AddTicketsAsync(id, 5, 15, true));
-                tasks.Add(_eventService.AddTicketsAsync(id, 5, 10, false));
                 tasks.Add(_movieService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}",
                     $"Director {i}", i + 110, 15, DateTime.UtcNow.AddDays(-i)));
                 tasks.Add(_newspaperService.CreateAsync(Guid.NewGuid(), $"Title {i}", $"Description {i}",

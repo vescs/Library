@@ -1,6 +1,7 @@
 using Autofac;
 using Library.Infrastructure.IoC;
 using Library.Infrastructure.IServices;
+using Library.Infrastructure.Mongo;
 using Library.Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -112,7 +113,7 @@ namespace Library.Api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
+            MongoConfiguration.Initialize();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

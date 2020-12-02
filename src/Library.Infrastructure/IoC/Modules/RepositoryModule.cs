@@ -14,7 +14,7 @@ namespace Library.Infrastructure.IoC.Modules
             var assembly = typeof(RepositoryModule).GetTypeInfo().Assembly;
 
             builder.RegisterAssemblyTypes(assembly)
-                .Where(x => x.IsAssignableTo<IRepository>())
+                .Where(x => x.IsAssignableTo<IRepository>() && !x.Name.Contains("Memory"))
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
         }

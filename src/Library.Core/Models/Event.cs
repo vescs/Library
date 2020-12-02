@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,11 @@ namespace Library.Core.Models
         public string Description { get; protected set; }
         public DateTime StartDate { get; protected set; }
         public DateTime EndDate { get; protected set; }
-        public IEnumerable<Ticket> Tickets { get { return _tickets; } }
+        public IEnumerable<Ticket> Tickets
+        {
+            get { return _tickets; }
+            protected set { _tickets = new HashSet<Ticket>(value); }
+        }
         public IEnumerable<Ticket> PurchasedTickets => Tickets.Where(x => x.Purchased);
         public IEnumerable<Ticket> AvailableTickets => Tickets.Where(x => !x.Purchased);
         public DateTime CreatedAt { get; protected set; }
@@ -41,6 +46,7 @@ namespace Library.Core.Models
             }
             Name = name;
             Update();
+
         }
         public void SetDescription(string description)
         {

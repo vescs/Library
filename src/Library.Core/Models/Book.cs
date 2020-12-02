@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Library.Core.Models
@@ -15,7 +16,11 @@ namespace Library.Core.Models
         public DateTime PremiereDate { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
-        public IEnumerable<User> Users { get { return _users; } }
+        public IEnumerable<User> Users
+        {
+            get { return _users; } 
+            protected set { _users = new HashSet<User>(value); }
+        }
         public int Quantity { get; protected set; }
         public int AvailableBooks => Quantity - _users.Count;
         public int LentBooks => _users.Count;
@@ -154,7 +159,7 @@ namespace Library.Core.Models
             {
                 throw new Exception("There are no available books.");
             }
-            if (_users.Contains(user))
+            if (_users.Any(x => x.Id == user.Id))
             {
                 throw new Exception("You already own this book.");
             }
@@ -163,11 +168,11 @@ namespace Library.Core.Models
         }
         public void Return(User user)
         {
-            if (!_users.Contains(user))
+            if (!_users.Any(x => x.Id == user.Id))
             {
                 throw new Exception("There is nothing to return.");
             }
-            _users.Remove(user);
+            _users.Remove(_users.FirstOrDefault(x => x.Id == user.Id));
             Update();
         }
         private void Update()

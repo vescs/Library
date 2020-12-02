@@ -21,6 +21,8 @@ namespace Library.Core.Models
             EventId = @event.Id;
             Seat = seat;
             Price = price;
+            CreatedAt = DateTime.UtcNow;
+            Update();
         }
         public void Purchase(User user)
         {
@@ -31,6 +33,7 @@ namespace Library.Core.Models
             UserId = user.Id;
             Username = user.Username;
             PurchasedAt = DateTime.UtcNow;
+            Update();
         }
         public void Cancel(User user)
         {
@@ -41,6 +44,11 @@ namespace Library.Core.Models
             UserId = null;
             Username = null;
             PurchasedAt = null;
+            Update();
+        }
+        private void Update()
+        {
+            UpdatedAt = DateTime.UtcNow;
         }
     }
 }

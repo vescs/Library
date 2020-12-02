@@ -9,7 +9,7 @@ namespace Library.Core.Repositories
     public interface IMovieRepository : IRepository
     {
         Task AddAsync(Movie movie);
-        Task<IEnumerable<Movie>> BrowseAsync(string name = "");
+        Task<IEnumerable<Movie>> BrowseAsync(string title = "");
         Task DeleteAsync(Guid id);
         Task<Movie> GetAsync(Guid id);
         Task UpdateAsync(Movie movie);
