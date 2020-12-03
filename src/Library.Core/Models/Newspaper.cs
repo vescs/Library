@@ -22,7 +22,9 @@ namespace Library.Core.Models
         public int Quantity { get; protected set; }
         public int AvailableNewspapers => Quantity - _users.Count;
         public int LentNewspapers => _users.Count;
+
         protected Newspaper() { }
+
         public Newspaper(Guid id, string title, string description, string type, int quantity, DateTime releaseDate)
         {
             Id = id;
@@ -34,6 +36,7 @@ namespace Library.Core.Models
             CreatedAt = DateTime.UtcNow;
             Update();
         }
+
         public void SetTitle(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
@@ -47,6 +50,7 @@ namespace Library.Core.Models
             Title = title;
             Update();
         }
+
         public void SetDescription(string description)
         {
             if (string.IsNullOrWhiteSpace(description))
@@ -74,6 +78,7 @@ namespace Library.Core.Models
             ReleaseDate = releaseDate;
             Update();
         }
+
         public void SetType(string type)
         {
             if (string.IsNullOrWhiteSpace(type))
@@ -87,6 +92,7 @@ namespace Library.Core.Models
             Type = type;
             Update();
         }
+
         public void SetQuantity(int quantity)
         {
             if (quantity <= 0)
@@ -100,6 +106,7 @@ namespace Library.Core.Models
             Quantity = quantity;
             Update();
         }
+
         public void IncreaseQuantity(int quantity)
         {
             if(quantity <= 0)
@@ -109,6 +116,7 @@ namespace Library.Core.Models
             Quantity += quantity;
             Update();
         }
+
         public void DecreaseQuantity(int quantity)
         {
             if (quantity <= 0)
@@ -123,6 +131,7 @@ namespace Library.Core.Models
             Quantity -= quantity;
             Update();
         }
+
         public void Lend(User user)
         {
             if(_users.Count >= Quantity)
@@ -136,6 +145,7 @@ namespace Library.Core.Models
             _users.Add(user);
             Update();
         }
+
         public void Return(User user)
         {
             if (!_users.Contains(user))
@@ -145,6 +155,7 @@ namespace Library.Core.Models
             _users.Remove(user);
             Update();
         }
+
         private void Update()
         {
             UpdatedAt = DateTime.UtcNow;

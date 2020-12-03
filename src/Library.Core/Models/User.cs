@@ -23,6 +23,7 @@ namespace Library.Core.Models
         public DateTime UpdatedAt { get; protected set; }
 
         protected User() { }
+
         public User(Guid id, string username, string email, string password, string salt, string role, string firstName, string lastName)
         {
             Id = id;
@@ -35,6 +36,7 @@ namespace Library.Core.Models
             CreatedAt = DateTime.UtcNow;
             Update();
         }
+
         public void SetUsername(string username)
         {
             if(string.IsNullOrWhiteSpace(username))
@@ -48,6 +50,7 @@ namespace Library.Core.Models
             Username = username;
             Update();
         }
+
         public void SetEmail(string email)
         {
             Regex mailRegex = new Regex(@"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*"
@@ -69,6 +72,7 @@ namespace Library.Core.Models
             Email = email;
             Update();
         }
+
         public void SetPassword(string password, string salt)
         {
             if (string.IsNullOrWhiteSpace(password) || password.Length < 5)
@@ -87,6 +91,7 @@ namespace Library.Core.Models
             Salt = salt;
             Update();
         }
+
         public void SetRole(string role)
         {
             if (!_roles.Contains(role))
@@ -100,6 +105,7 @@ namespace Library.Core.Models
             Role = role;
             Update();
         }
+
         public void SetFirstName(string firstName)
         {
             if (string.IsNullOrWhiteSpace(firstName))
@@ -113,6 +119,7 @@ namespace Library.Core.Models
             FirstName = firstName;
             Update();
         }
+
         public void SetLastName(string lastName)
         {
             if (string.IsNullOrWhiteSpace(lastName))
@@ -126,10 +133,12 @@ namespace Library.Core.Models
             LastName = lastName;
             Update();
         }
+
         private void Update()
         {
             UpdatedAt = DateTime.UtcNow;
         }
+
         public override bool Equals(object obj)
         {
             User tempUser = obj as User;
@@ -139,6 +148,7 @@ namespace Library.Core.Models
             }
             return tempUser.Id == this.Id;
         }
+
         public override int GetHashCode()
         {
             return this.Id.GetHashCode();

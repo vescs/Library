@@ -22,7 +22,9 @@ namespace Library.Core.Models
         public IEnumerable<Ticket> AvailableTickets => Tickets.Where(x => !x.Purchased);
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
+
         protected Event() { }
+
         public Event(Guid id, string name, string description, DateTime startDate, DateTime endDate)
         {
             Id = id;
@@ -48,6 +50,7 @@ namespace Library.Core.Models
             Update();
 
         }
+
         public void SetDescription(string description)
         {
             if (string.IsNullOrWhiteSpace(description))
@@ -61,6 +64,7 @@ namespace Library.Core.Models
             Description = description;
             Update();
         }
+
         public void SetStartDate(DateTime startDate)
         {
             if (startDate == DateTime.MinValue)
@@ -74,6 +78,7 @@ namespace Library.Core.Models
             StartDate = startDate;
             Update();
         }
+
         public void SetEndDate(DateTime endDate)
         {
             if (endDate == DateTime.MinValue)
@@ -91,6 +96,7 @@ namespace Library.Core.Models
             EndDate = endDate;
             Update();
         }
+
         public void AddTickets(int amount, decimal price, bool seat)
         {
             if (amount <= 0)
@@ -107,6 +113,7 @@ namespace Library.Core.Models
             }
             Update();
         }
+
         public void PurchaseTickets(User user, int amount, bool seat)
         {
             if (amount <= 0)
@@ -128,6 +135,7 @@ namespace Library.Core.Models
             }
             Update();
         }
+
         public void CancelTickets(User user, int amount, bool seat)
         {
             if(amount <= 0)
@@ -141,14 +149,16 @@ namespace Library.Core.Models
             }
             foreach (var ticket in tickets)
             {
-                ticket.Cancel(user);
+                ticket.Cancel();
             }
             Update();
         }
+
         public IEnumerable<Ticket> TicketsBoughtByUser(User user)
         {
             return PurchasedTickets.Where(x => x.UserId == user.Id);
         }
+
         private void Update()
         {
             UpdatedAt = DateTime.UtcNow;

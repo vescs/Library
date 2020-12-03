@@ -24,7 +24,9 @@ namespace Library.Core.Models
         public int Quantity { get; protected set; }
         public int AvailableBooks => Quantity - _users.Count;
         public int LentBooks => _users.Count;
+
         protected Book() { }
+
         public Book(Guid id, string title, string description, string author, int pages, 
             string publishingHouse, int quantity, DateTime premiereDate)
         {
@@ -39,6 +41,7 @@ namespace Library.Core.Models
             CreatedAt = DateTime.UtcNow;
             Update();
         }
+
         public void SetTitle(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
@@ -52,6 +55,7 @@ namespace Library.Core.Models
             Title = title;
             Update();
         }
+
         public void SetDescription(string description)
         {
             if (string.IsNullOrWhiteSpace(description))
@@ -65,6 +69,7 @@ namespace Library.Core.Models
             Description = description;
             Update();
         }
+
         public void SetPages(int pages)
         {
             if (pages <= 0)
@@ -78,6 +83,7 @@ namespace Library.Core.Models
             Pages = pages;
             Update();
         }
+
         public void SetPremiereDate(DateTime premiereDate)
         {
             if (premiereDate == DateTime.MinValue)
@@ -91,6 +97,7 @@ namespace Library.Core.Models
             PremiereDate = premiereDate;
             Update();
         }
+
         public void SetAuthor(string author)
         {
             if (string.IsNullOrWhiteSpace(author))
@@ -104,6 +111,7 @@ namespace Library.Core.Models
             Author = author;
             Update();
         }
+
         public void SetPublishingHouse(string publishingHouse)
         {
             if (string.IsNullOrWhiteSpace(publishingHouse))
@@ -117,6 +125,7 @@ namespace Library.Core.Models
             PublishingHouse = publishingHouse;
             Update();
         }
+
         public void SetQuantity(int quantity)
         {
             if (quantity <= 0)
@@ -130,6 +139,7 @@ namespace Library.Core.Models
             Quantity = quantity;
             Update();
         }
+
         public void IncreaseQuantity(int quantity)
         {
             if (quantity <= 0)
@@ -139,6 +149,7 @@ namespace Library.Core.Models
             Quantity += quantity;
             Update();
         }
+
         public void DecreaseQuantity(int quantity)
         {
             if (quantity <= 0)
@@ -153,19 +164,21 @@ namespace Library.Core.Models
             
             Update();
         }
+
         public void Lend(User user)
         {
             if (_users.Count >= Quantity)
             {
                 throw new Exception("There are no available books.");
             }
-            if (_users.Any(x => x.Id == user.Id))
+            if (_users.Contains(user))
             {
                 throw new Exception("You already own this book.");
             }
             _users.Add(user);
             Update();
         }
+
         public void Return(User user)
         {
             if (!_users.Contains(user))
@@ -175,6 +188,7 @@ namespace Library.Core.Models
             _users.Remove(user);
             Update();
         }
+
         private void Update()
         {
             UpdatedAt = DateTime.UtcNow;

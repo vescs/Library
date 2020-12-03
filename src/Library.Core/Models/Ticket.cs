@@ -15,7 +15,9 @@ namespace Library.Core.Models
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
         public bool Purchased => UserId.HasValue;
+
         protected Ticket() { }
+
         public Ticket(Event @event, bool seat, decimal price)
         {
             EventId = @event.Id;
@@ -24,6 +26,7 @@ namespace Library.Core.Models
             CreatedAt = DateTime.UtcNow;
             Update();
         }
+
         public void Purchase(User user)
         {
             if (Purchased)
@@ -35,7 +38,8 @@ namespace Library.Core.Models
             PurchasedAt = DateTime.UtcNow;
             Update();
         }
-        public void Cancel(User user)
+
+        public void Cancel()
         {
             if (!Purchased)
             {
@@ -46,6 +50,7 @@ namespace Library.Core.Models
             PurchasedAt = null;
             Update();
         }
+
         private void Update()
         {
             UpdatedAt = DateTime.UtcNow;
