@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using Library.Core.Repositories;
+using Library.Infrastructure.Settings;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -18,6 +20,6 @@ namespace Library.Infrastructure.IoC.Modules
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
         }
-       
+        
     }
 }
