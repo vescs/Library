@@ -1,4 +1,5 @@
 using Autofac;
+using Library.Api.Framework;
 using Library.Infrastructure.IoC;
 using Library.Infrastructure.IServices;
 using Library.Infrastructure.Mongo;
@@ -120,6 +121,7 @@ namespace Library.Api
             app.UseAuthentication();
             app.UseAuthorization();
             MongoConfiguration.Initialize();
+            app.UseErrorHandler();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
