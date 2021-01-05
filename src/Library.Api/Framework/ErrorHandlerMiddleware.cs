@@ -39,8 +39,14 @@ namespace Library.Api.Framework
                 case Exception _ when exceptionType == typeof(ArgumentException):
                     statusCode = HttpStatusCode.BadRequest;
                     break;
+                case Exception _ when exceptionType == typeof(Exception):
+                    statusCode = HttpStatusCode.InternalServerError;
+                    break;
             }
-            var response = new { message = exception.Message };
+            var response = new 
+            { 
+                message = exception.Message
+            };
             var payload = JsonConvert.SerializeObject(response);
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
