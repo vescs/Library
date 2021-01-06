@@ -41,7 +41,8 @@ namespace Library.Core.Models
         {
             if(string.IsNullOrWhiteSpace(username))
             {
-                throw new Exception($"Username can't be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidUsername, 
+                    $"Username can't be empty.");
             }
             if(username == Username)
             {
@@ -59,17 +60,19 @@ namespace Library.Core.Models
 
             if (string.IsNullOrWhiteSpace(email))
             {
-                throw new Exception($"Email can't be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidEmail, 
+                    $"Email can't be empty.");
             }
             if (!mailRegex.IsMatch(email))
             {
-                throw new Exception($"Invalid email. Please enter correct one.");
+                throw new DomainException(DomainErrorCodes.InvalidEmail, 
+                    $"Invalid email. Please enter correct one.");
             }
             if(email == Email)
             {
                 return;
             }
-            Email = email;
+            Email = email.ToLowerInvariant();
             Update();
         }
 
@@ -77,11 +80,13 @@ namespace Library.Core.Models
         {
             if (string.IsNullOrWhiteSpace(password) || password.Length < 5)
             {
-                throw new Exception($"Given password is invalid. Please enter password longer than 4 characters.");
+                throw new DomainException(DomainErrorCodes.InvalidPassword, 
+                    $"Given password is invalid. Please enter password longer than 4 characters.");
             }
             if (string.IsNullOrWhiteSpace(salt))
             {
-                throw new Exception("Salt can not be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidPassword, 
+                    "Salt can not be empty.");
             }
             if (password == Password)
             {
@@ -94,9 +99,11 @@ namespace Library.Core.Models
 
         public void SetRole(string role)
         {
+            role = role.ToLowerInvariant();
             if (!_roles.Contains(role))
             {
-                throw new Exception("Given role does not exist.");
+                throw new DomainException(DomainErrorCodes.InvalidRole,
+                    "Given role does not exist.");
             }
             if(role == Role)
             {
@@ -110,7 +117,8 @@ namespace Library.Core.Models
         {
             if (string.IsNullOrWhiteSpace(firstName))
             { 
-                throw new Exception($"First name can't be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidFirstName, 
+                    $"First name can't be empty.");
             }
             if (firstName == FirstName)
             {
@@ -124,7 +132,8 @@ namespace Library.Core.Models
         {
             if (string.IsNullOrWhiteSpace(lastName))
             {
-                throw new Exception($"Last name can't be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidLastName, 
+                    $"Last name can't be empty.");
             }
             if (lastName == LastName)
             {

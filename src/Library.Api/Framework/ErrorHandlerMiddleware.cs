@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Library.Core.Models;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -27,17 +28,23 @@ namespace Library.Api.Framework
                 await HandleErrorAsync(context, exception);
             }
         }
+
         private static Task HandleErrorAsync(HttpContext context, Exception exception)
         {
+            var errorCode = "Error";
             var exceptionType = exception.GetType();
             var statusCode = HttpStatusCode.InternalServerError;
             switch (exception)
             {
+                case DomainException e when exceptionType == typeof(DomainException):
+                    statusCode = HttpStatusCode.InternalServerError;
+                    errorCode = e.Code;
+                    break;
                 case Exception _ when exceptionType == typeof(UnauthorizedAccessException):
                     statusCode = HttpStatusCode.Unauthorized;
                     break;
                 case Exception _ when exceptionType == typeof(ArgumentException):
-                    statusCode = HttpStatusCode.BadRequest;
+                    statusCode = HttpStatusCode.BadRequest; 
                     break;
                 case Exception _ when exceptionType == typeof(Exception):
                     statusCode = HttpStatusCode.InternalServerError;
@@ -45,6 +52,7 @@ namespace Library.Api.Framework
             }
             var response = new 
             { 
+                code = errorCode,
                 message = exception.Message
             };
             var payload = JsonConvert.SerializeObject(response);
