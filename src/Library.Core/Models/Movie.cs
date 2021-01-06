@@ -43,7 +43,8 @@ namespace Library.Core.Models
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new Exception("Title can not be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidTitle, 
+                    "Title can not be empty.");
             }
             if(title == Title)
             {
@@ -57,7 +58,8 @@ namespace Library.Core.Models
         {
             if (string.IsNullOrWhiteSpace(description))
             {
-                throw new Exception("Description can not be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidDescription, 
+                    "Description can not be empty.");
             }
             if (description == Description)
             {
@@ -71,7 +73,8 @@ namespace Library.Core.Models
         {
             if(length <= 0)
             {
-                throw new Exception("Lenght has to be greater than zero.");
+                throw new DomainException(DomainErrorCodes.InvalidLength, 
+                    "Lenght has to be greater than zero.");
             }
             if(length == Length)
             {
@@ -85,7 +88,8 @@ namespace Library.Core.Models
         {
             if(premiereDate == DateTime.MinValue)
             {
-                throw new Exception("Enter proper date.");
+                throw new DomainException(DomainErrorCodes.InvalidDate, 
+                    "Enter proper date.");
             }
             if(premiereDate == PremiereDate)
             {
@@ -99,7 +103,8 @@ namespace Library.Core.Models
         {
             if (string.IsNullOrWhiteSpace(director))
             {
-                throw new Exception("Director's name is missing.");
+                throw new DomainException(DomainErrorCodes.InvalidDirector, 
+                    "Director's name is missing.");
             }
             if (director == Director)
             {
@@ -113,7 +118,8 @@ namespace Library.Core.Models
         {
             if (quantity <= 0)
             {
-                throw new Exception("Quantity has to be greater than zero.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity, 
+                    "Quantity has to be greater than zero.");
             }
             if (quantity == Quantity)
             {
@@ -127,7 +133,8 @@ namespace Library.Core.Models
         {
             if (quantity <= 0)
             {
-                throw new Exception("Quantity has to be greater than zero.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity, 
+                    "Quantity has to be greater than zero.");
             }
             Quantity += quantity;
             Update();
@@ -137,11 +144,13 @@ namespace Library.Core.Models
         {
             if (quantity <= 0)
             {
-                throw new Exception("Quantity has to be greater than zero.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity,
+                    "Quantity has to be greater than zero.");
             }
             if (AvailableMovies < quantity)
             {
-                throw new Exception("Quantity of movies you want to cancel is bigger than quantity of movies you can cancel.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity, 
+                    "Quantity of movies you want to cancel is bigger than quantity of movies you can cancel.");
             }
             Quantity -= quantity;
 
@@ -152,11 +161,13 @@ namespace Library.Core.Models
         {
             if (_users.Count >= Quantity)
             {
-                throw new Exception("There are no available movies.");
+                throw new DomainException(DomainErrorCodes.NoAvailableMovies, 
+                    "There are no available movies.");
             }
             if (_users.Contains(user))
             {
-                throw new Exception("You already own this movie.");
+                throw new DomainException(DomainErrorCodes.MovieAlreadyOwned, 
+                    "You already own this movie.");
             }
             _users.Add(user);
             Update();
@@ -166,7 +177,8 @@ namespace Library.Core.Models
         {
             if (!_users.Contains(user))
             {
-                throw new Exception("There is nothing to return.");
+                throw new DomainException(DomainErrorCodes.NotOwned, 
+                    "There is nothing to return.");
             }
             _users.Remove(user);
             Update();

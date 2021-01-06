@@ -40,7 +40,8 @@ namespace Library.Core.Models
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new Exception($"Name can't be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidName, 
+                    $"Name can't be empty.");
             }
             if (name == Name)
             {
@@ -55,7 +56,8 @@ namespace Library.Core.Models
         {
             if (string.IsNullOrWhiteSpace(description))
             {
-                throw new Exception($"Description can't be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidDescription, 
+                    $"Description can't be empty.");
             }
             if (description == Description)
             {
@@ -69,7 +71,8 @@ namespace Library.Core.Models
         {
             if (startDate == DateTime.MinValue)
             {
-                throw new Exception("Enter proper date.");
+                throw new DomainException(DomainErrorCodes.InvalidDate, 
+                    "Enter proper date.");
             }
             if (startDate == StartDate)
             {
@@ -83,11 +86,13 @@ namespace Library.Core.Models
         {
             if (endDate == DateTime.MinValue)
             {
-                throw new Exception("Enter proper date.");
+                throw new DomainException(DomainErrorCodes.InvalidDate, 
+                    "Enter proper date.");
             }
             if (endDate < StartDate)
             {
-                throw new Exception("Event can not finish before start.");
+                throw new DomainException(DomainErrorCodes.InvalidDate, 
+                    "Event can not finish before start.");
             }
             if(endDate == EndDate)
             {
@@ -101,11 +106,13 @@ namespace Library.Core.Models
         {
             if (amount <= 0)
             {
-                throw new Exception("Amount of tickets has to be greater than zero.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity, 
+                    "Amount of tickets has to be greater than zero.");
             }
             if (price < 0)
             {
-                throw new Exception("Price of tickets can not be negative number.");
+                throw new DomainException(DomainErrorCodes.InvalidPrice, 
+                    "Price of tickets can not be negative number.");
             }
             for (int i = 0; i < amount; i++)
             {
@@ -118,16 +125,19 @@ namespace Library.Core.Models
         {
             if (amount <= 0)
             {
-                throw new Exception("Amount of tickets has to be greater than zero.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity, 
+                    "Amount of tickets has to be greater than zero.");
             }
             if (AvailableTickets.Count() < amount)
             {
-                throw new Exception("There is less tickets than you want to buy.");
+                throw new DomainException(DomainErrorCodes.NotEnoughTickets, 
+                    "There is less tickets than you want to buy.");
             }
             var tickets = AvailableTickets.Where(x => x.Seat == seat).Take(amount);
             if(tickets.Count() < amount)
             {
-                throw new Exception("There is less tickets than you want to buy.");
+                throw new DomainException(DomainErrorCodes.NotEnoughTickets, 
+                    "There is less tickets than you want to buy.");
             }
             foreach (var ticket in tickets)
             {
@@ -140,12 +150,14 @@ namespace Library.Core.Models
         {
             if(amount <= 0)
             {
-                throw new Exception("Amount of tickets has to be greater than zero.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity, 
+                    "Amount of tickets has to be greater than zero.");
             }
             var tickets = TicketsBoughtByUser(user).Where(x => x.Seat == seat).Take(amount);
             if (tickets.Count() < amount)
             {
-                throw new Exception("You want to cancel more tickets than you own.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity, 
+                    "You want to cancel more tickets than you own.");
             }
             foreach (var ticket in tickets)
             {

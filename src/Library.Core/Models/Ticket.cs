@@ -31,7 +31,8 @@ namespace Library.Core.Models
         {
             if (Purchased)
             {
-                throw new Exception($"Ticket was already purchased by: {Username}.");
+                throw new DomainException(DomainErrorCodes.TicketAlreadyPurchased, 
+                    $"Ticket was already purchased by: {Username}.");
             }
             UserId = user.Id;
             Username = user.Username;
@@ -43,7 +44,8 @@ namespace Library.Core.Models
         {
             if (!Purchased)
             {
-                throw new Exception($"Ticket wasn't purchased.");
+                throw new DomainException(DomainErrorCodes.TicketNotPurchased, 
+                    $"Ticket wasn't purchased.");
             }
             UserId = null;
             Username = null;

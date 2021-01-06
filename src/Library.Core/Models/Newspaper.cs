@@ -41,7 +41,8 @@ namespace Library.Core.Models
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new Exception("Title can not be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidTitle, 
+                    "Title can not be empty.");
             }
             if (title == Title)
             {
@@ -55,7 +56,8 @@ namespace Library.Core.Models
         {
             if (string.IsNullOrWhiteSpace(description))
             {
-                throw new Exception("Description can not be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidDescription, 
+                    "Description can not be empty.");
             }
             if (description == Description)
             {
@@ -69,7 +71,8 @@ namespace Library.Core.Models
         {
             if (releaseDate == DateTime.MinValue)
             {
-                throw new Exception("Enter proper date.");
+                throw new DomainException(DomainErrorCodes.InvalidDate, 
+                    "Enter proper date.");
             }
             if (releaseDate == ReleaseDate)
             {
@@ -83,7 +86,8 @@ namespace Library.Core.Models
         {
             if (string.IsNullOrWhiteSpace(type))
             {
-                throw new Exception("Type can not be empty.");
+                throw new DomainException(DomainErrorCodes.InvalidType, 
+                    "Type can not be empty.");
             }
             if (type == Type)
             {
@@ -97,7 +101,8 @@ namespace Library.Core.Models
         {
             if (quantity <= 0)
             {
-                throw new Exception("Quantity has to be greater than zero.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity, 
+                    "Quantity has to be greater than zero.");
             }
             if (quantity == Quantity)
             {
@@ -111,7 +116,8 @@ namespace Library.Core.Models
         {
             if(quantity <= 0)
             {
-                throw new Exception("Quantity has to be greater than zero.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity, 
+                    "Quantity has to be greater than zero.");
             }
             Quantity += quantity;
             Update();
@@ -121,11 +127,13 @@ namespace Library.Core.Models
         {
             if (quantity <= 0)
             {
-                throw new Exception("Quantity has to be greater than zero.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity,
+                    "Quantity has to be greater than zero.");
             }
             if (AvailableNewspapers < quantity)
             {
-                throw new Exception("Quantity of newspapers you want to cancel is bigger than quantity of newspapers you can cancel.");
+                throw new DomainException(DomainErrorCodes.InvalidQuantity, 
+                    "Quantity of newspapers you want to cancel is bigger than quantity of newspapers you can cancel.");
             }
 
             Quantity -= quantity;
@@ -136,11 +144,13 @@ namespace Library.Core.Models
         {
             if(_users.Count >= Quantity)
             {
-                throw new Exception("There are no available newspapers.");
+                throw new DomainException(DomainErrorCodes.NoAvailableNewspapers, 
+                    "There are no available newspapers.");
             }
             if (_users.Contains(user))
             {
-                throw new Exception("You already own this newspaper.");
+                throw new DomainException(DomainErrorCodes.NewspaperAlreadyOwned, 
+                    "You already own this newspaper.");
             }
             _users.Add(user);
             Update();
@@ -150,7 +160,8 @@ namespace Library.Core.Models
         {
             if (!_users.Contains(user))
             {
-                throw new Exception("There is nothing to return.");
+                throw new DomainException(DomainErrorCodes.NotOwned, 
+                    "There is nothing to return.");
             }
             _users.Remove(user);
             Update();
