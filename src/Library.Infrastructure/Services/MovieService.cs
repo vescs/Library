@@ -2,6 +2,7 @@
 using Library.Core.Models;
 using Library.Core.Repositories;
 using Library.Infrastructure.DTO;
+using Library.Infrastructure.Exceptions;
 using Library.Infrastructure.Extentions;
 using Library.Infrastructure.IServices;
 using System;
@@ -34,7 +35,8 @@ namespace Library.Infrastructure.Services
             var movie = await _movieRepository.GetAsync(id);
             if(movie != null)
             {
-                throw new Exception($"Movie with id {id} already exists.");
+                throw new ServiceException(ServiceErrorCodes.AlreadyExists, 
+                    $"Movie with id {id} already exists.");
             }
             movie = new Movie(id, title, description, director, length, quantity, premiereDate);
             await _movieRepository.AddAsync(movie);

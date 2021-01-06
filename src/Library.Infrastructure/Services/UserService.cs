@@ -2,6 +2,7 @@
 using Library.Core.Models;
 using Library.Core.Repositories;
 using Library.Infrastructure.DTO;
+using Library.Infrastructure.Exceptions;
 using Library.Infrastructure.Extentions;
 using Library.Infrastructure.IServices;
 using System;
@@ -14,14 +15,12 @@ namespace Library.Infrastructure.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IJwtHandler _jwtHandler;
         private readonly IMapper _mapper;
         private readonly IEncrypter _encrypter;
         
-        public UserService(IUserRepository userRepository, IJwtHandler jwtHandler, IMapper mapper, IEncrypter encrypter)
+        public UserService(IUserRepository userRepository, IMapper mapper, IEncrypter encrypter)
         {
             _userRepository = userRepository;
-            _jwtHandler = jwtHandler;
             _mapper = mapper;
             _encrypter = encrypter;
         }
@@ -44,7 +43,8 @@ namespace Library.Infrastructure.Services
             var hash = _encrypter.GetHash(password, user.Salt);
             if (user.Password != hash)
             {
-                throw new Exception("Invalid credentials");
+                throw new ServiceException(ServiceErrorCodes.InvalidCredentials, 
+                    "Invalid credentials");
             }
         }
 
@@ -54,12 +54,14 @@ namespace Library.Infrastructure.Services
             var user = await _userRepository.GetAsync(id);
             if (user != null)
             {
-                throw new Exception($"User with id {id} already exists.");
+                throw new ServiceException(ServiceErrorCodes.AlreadyExists, 
+                    $"User with id {id} already exists.");
             }
             user = await _userRepository.GetAsync(email);
             if (user != null)
             {
-                throw new Exception($"User with email: '{email}' already exists.");
+                throw new ServiceException(ServiceErrorCodes.AlreadyExists, 
+                    $"User with email: '{email}' already exists.");
             }
             var salt = _encrypter.GetSalt(password);
             var hash = _encrypter.GetHash(password, salt);

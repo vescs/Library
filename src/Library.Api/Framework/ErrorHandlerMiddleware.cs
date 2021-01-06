@@ -1,4 +1,5 @@
 ﻿using Library.Core.Models;
+using Library.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
@@ -31,14 +32,18 @@ namespace Library.Api.Framework
 
         private static Task HandleErrorAsync(HttpContext context, Exception exception)
         {
-            var errorCode = "Error";
+            var errorCode = "error";
             var exceptionType = exception.GetType();
             var statusCode = HttpStatusCode.InternalServerError;
             switch (exception)
             {
                 case DomainException e when exceptionType == typeof(DomainException):
-                    statusCode = HttpStatusCode.InternalServerError;
+                    statusCode = HttpStatusCode.BadRequest;
                     errorCode = e.Code;
+                    break;
+                case ServiceException e when exceptionType == typeof(ServiceException):
+                    errorCode = e.Code;
+                    statusCode = (errorCode == ServiceErrorCodes.DoesNotExist) ?  HttpStatusCode.NotFound : HttpStatusCode.BadRequest;
                     break;
                 case Exception _ when exceptionType == typeof(UnauthorizedAccessException):
                     statusCode = HttpStatusCode.Unauthorized;

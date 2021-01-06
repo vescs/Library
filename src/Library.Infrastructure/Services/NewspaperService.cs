@@ -2,6 +2,7 @@
 using Library.Core.Models;
 using Library.Core.Repositories;
 using Library.Infrastructure.DTO;
+using Library.Infrastructure.Exceptions;
 using Library.Infrastructure.Extentions;
 using Library.Infrastructure.IServices;
 using System;
@@ -33,7 +34,8 @@ namespace Library.Infrastructure.Services
             var newspaper = await _newspaperRepository.GetAsync(id);
             if(newspaper != null)
             {
-                throw new Exception($"Newspaper with id {id} already exists.");
+                throw new ServiceException(ServiceErrorCodes.AlreadyExists, 
+                    $"Newspaper with id {id} already exists.");
             }
             newspaper = new Newspaper(id, title, description, type, quantity, releaseDate);
             await _newspaperRepository.AddAsync(newspaper);

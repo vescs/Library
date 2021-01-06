@@ -2,6 +2,7 @@
 using Library.Core.Models;
 using Library.Core.Repositories;
 using Library.Infrastructure.DTO;
+using Library.Infrastructure.Exceptions;
 using Library.Infrastructure.Extentions;
 using Library.Infrastructure.IServices;
 using System;
@@ -39,12 +40,14 @@ namespace Library.Infrastructure.Services
             var @event = await _eventRepository.GetAsync(id);
             if (@event != null)
             {
-                throw new Exception($"Event with id {id} already exists.");
+                throw new ServiceException(ServiceErrorCodes.AlreadyExists, 
+                    $"Event with id {id} already exists.");
             }
             @event = await _eventRepository.GetAsync(name);
             if (@event != null)
             {
-                throw new Exception($"Event with name '{name}' already exists.");
+                throw new ServiceException(ServiceErrorCodes.AlreadyExists, 
+                    $"Event with name '{name}' already exists.");
             }
             @event = new Event(id, name, description, startDate, endDate);
             await _eventRepository.AddAsync(@event);

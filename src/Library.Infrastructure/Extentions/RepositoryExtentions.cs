@@ -1,5 +1,6 @@
 ﻿using Library.Core.Models;
 using Library.Core.Repositories;
+using Library.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,8 @@ namespace Library.Infrastructure.Extentions
             var book = await bookRepository.GetAsync(id);
             if (book == null)
             {
-                throw new Exception($"Book with id '{id}' does not exist.");
+                throw new ServiceException(ServiceErrorCodes.DoesNotExist, 
+                    $"Book with id '{id}' does not exist.");
             }
             return book;
         }
@@ -23,7 +25,8 @@ namespace Library.Infrastructure.Extentions
             var @event = await eventRepository.GetAsync(id);
             if (@event == null)
             {
-                throw new Exception($"Event with id '{id}' does not exist.");
+                throw new ServiceException(ServiceErrorCodes.DoesNotExist, 
+                    $"Event with id '{id}' does not exist.");
             }
             return @event;
         }
@@ -32,7 +35,8 @@ namespace Library.Infrastructure.Extentions
             var movie = await movieRepository.GetAsync(id);
             if (movie == null)
             {
-                throw new Exception($"Movie with id '{id}' does not exist.");
+                throw new ServiceException(ServiceErrorCodes.DoesNotExist, 
+                    $"Movie with id '{id}' does not exist.");
             }
             return movie;
         }
@@ -41,7 +45,8 @@ namespace Library.Infrastructure.Extentions
             var newspaper = await newspaperRepository.GetAsync(id);
             if (newspaper == null)
             {
-                throw new Exception($"Newspaper with id '{id}' does not exist.");
+                throw new ServiceException(ServiceErrorCodes.DoesNotExist, 
+                    $"Newspaper with id '{id}' does not exist.");
             }
             return newspaper;
         }
@@ -50,7 +55,8 @@ namespace Library.Infrastructure.Extentions
             var @event = await eventRepository.GetAsync(name);
             if (@event == null)
             {
-                throw new Exception($"Event with name '{name}' does not exist.");
+                throw new ServiceException(ServiceErrorCodes.DoesNotExist, 
+                    $"Event with name '{name}' does not exist.");
             }
             return @event;
         }
@@ -59,7 +65,8 @@ namespace Library.Infrastructure.Extentions
             var user = await userRepository.GetAsync(id);
             if (user == null)
             {
-                throw new Exception($"User with id '{id}' does not exist.");
+                throw new ServiceException(ServiceErrorCodes.DoesNotExist, 
+                    $"User with id '{id}' does not exist.");
             }
             return user;
         }
@@ -68,7 +75,8 @@ namespace Library.Infrastructure.Extentions
             var user = await userRepository.GetAsync(email);
             if (user == null)
             {
-                throw new Exception("Invalid credentials");
+                throw new ServiceException(ServiceErrorCodes.InvalidCredentials, 
+                    "Invalid credentials");
             }
             return user;
         }

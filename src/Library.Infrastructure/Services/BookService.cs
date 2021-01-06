@@ -2,6 +2,7 @@
 using Library.Core.Models;
 using Library.Core.Repositories;
 using Library.Infrastructure.DTO;
+using Library.Infrastructure.Exceptions;
 using Library.Infrastructure.Extentions;
 using Library.Infrastructure.IServices;
 using System;
@@ -46,7 +47,8 @@ namespace Library.Infrastructure.Services
             var book = await _bookRepository.GetAsync(id);
             if (book != null)
             {
-                throw new Exception($"Book with id {id} already exists.");
+                throw new ServiceException(ServiceErrorCodes.AlreadyExists, 
+                    $"Book with id {id} already exists.");
             }
             book = new Book(id, title, description, author, pages, publishingHouse, quantity, premiereDate);
             await _bookRepository.AddAsync(book);
