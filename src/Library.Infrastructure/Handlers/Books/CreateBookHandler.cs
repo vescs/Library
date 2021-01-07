@@ -11,15 +11,22 @@ namespace Library.Infrastructure.Handlers.Books
     public class CreateBookHandler : ICommandHandler<CreateBook>
     {
         private readonly IBookService _bookService;
-        public CreateBookHandler(IBookService bookService)
+        private readonly IFluentHandler _fluentHandler;
+
+        public CreateBookHandler(IBookService bookService, IFluentHandler fluentHandler)
         {
             _bookService = bookService;
+            _fluentHandler = fluentHandler;
         }
+
         public async Task HandleAsync(CreateBook command)
-        {
-            command.Id = Guid.NewGuid();
-            await _bookService.CreateAsync(command.Id, command.Title, command.Description, command.Author,
-                command.Pages, command.PublishingHouse, command.Quantity, command.PremiereDate);
-        }
+            => await _fluentHandler
+                .Run(async () =>
+                {
+                    command.Id = Guid.NewGuid();
+                    await _bookService.CreateAsync(command.Id, command.Title, command.Description, command.Author,
+                        command.Pages, command.PublishingHouse, command.Quantity, command.PremiereDate);
+                })
+                .ExecuteAsync();
     }
 }

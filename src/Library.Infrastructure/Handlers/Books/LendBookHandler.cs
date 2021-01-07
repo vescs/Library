@@ -11,13 +11,17 @@ namespace Library.Infrastructure.Handlers.Books
     public class LendBookHandler : ICommandHandler<LendBook>
     {
         private readonly IBookService _bookService;
-        public LendBookHandler(IBookService bookService)
+        private readonly IFluentHandler _fluentHandler;
+
+        public LendBookHandler(IBookService bookService, IFluentHandler fluentHandler)
         {
             _bookService = bookService;
+            _fluentHandler = fluentHandler;
         }
+
         public async Task HandleAsync(LendBook command)
-        {
-            await _bookService.LendAsync(command.Id, command.UserId);
-        }
+            => await _fluentHandler
+                .Run(async () => await _bookService.LendAsync(command.Id, command.UserId))
+                .ExecuteAsync();
     }
 }

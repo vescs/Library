@@ -11,13 +11,17 @@ namespace Library.Infrastructure.Handlers.Books
     public class RemoveBookHandler : ICommandHandler<RemoveBook>
     {
         private readonly IBookService _bookService;
-        public RemoveBookHandler(IBookService bookService)
+        private readonly IFluentHandler _fluentHandler;
+
+        public RemoveBookHandler(IBookService bookService, IFluentHandler fluentHandler)
         {
             _bookService = bookService;
+            _fluentHandler = fluentHandler;
         }
+
         public async Task HandleAsync(RemoveBook command)
-        {
-            await _bookService.DecreaseQuantityAsync(command.Id, command.Quantity);
-        }
+            => await _fluentHandler
+                .Run(async () => await _bookService.DecreaseQuantityAsync(command.Id, command.Quantity))
+                .ExecuteAsync();
     }
 }

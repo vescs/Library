@@ -11,15 +11,17 @@ namespace Library.Infrastructure.Handlers.Events
     public class UpdateEventHandler : ICommandHandler<UpdateEvent>
     {
         private readonly IEventService _eventService;
+        private readonly IFluentHandler _fluentHandler;
 
-        public UpdateEventHandler(IEventService eventService)
+        public UpdateEventHandler(IEventService eventService, IFluentHandler fluentHandler)
         {
             _eventService = eventService;
+            _fluentHandler = fluentHandler;
         }
 
         public async Task HandleAsync(UpdateEvent command)
-        {
-            await _eventService.UpdateAsync(command.Id, command.Description);
-        }
+            => await _fluentHandler
+                .Run(async () => await _eventService.UpdateAsync(command.Id, command.Description))
+                .ExecuteAsync();
     }
 }

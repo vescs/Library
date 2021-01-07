@@ -11,15 +11,17 @@ namespace Library.Infrastructure.Handlers.Tickets
     public class PurchaseTicketsHandler : ICommandHandler<PurchaseTickets>
     {
         private readonly ITicketService _ticketService;
+        private readonly IFluentHandler _fluentHandler;
 
-        public PurchaseTicketsHandler(ITicketService ticketService)
+        public PurchaseTicketsHandler(ITicketService ticketService, IFluentHandler fluentHandler)
         {
             _ticketService = ticketService;
+            _fluentHandler = fluentHandler;
         }
 
         public async Task HandleAsync(PurchaseTickets command)
-        {
-            await _ticketService.PurchaseAsync(command.UserId, command.EventId, command.Amount, command.Seat);
-        }
+            => await _fluentHandler
+                .Run(async () => await _ticketService.PurchaseAsync(command.UserId, command.EventId, command.Amount, command.Seat))
+                .ExecuteAsync();
     }
 }

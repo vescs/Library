@@ -11,15 +11,17 @@ namespace Library.Infrastructure.Handlers.Events
     public class AddTicketsHandler : ICommandHandler<AddTickets>
     {
         private readonly IEventService _eventService;
+        private readonly IFluentHandler _fluentHandler;
 
-        public AddTicketsHandler(IEventService eventService)
+        public AddTicketsHandler(IEventService eventService, IFluentHandler fluentHandler)
         {
             _eventService = eventService;
+            _fluentHandler = fluentHandler;
         }
 
         public async Task HandleAsync(AddTickets command)
-        {
-            await _eventService.AddTicketsAsync(command.EventId, command.Amount, command.Price, command.Seat);
-        }
+            => await _fluentHandler
+                .Run(async () => await _eventService.AddTicketsAsync(command.EventId, command.Amount, command.Price, command.Seat))
+                .ExecuteAsync();
     }
 }

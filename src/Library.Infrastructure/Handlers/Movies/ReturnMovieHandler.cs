@@ -11,15 +11,17 @@ namespace Library.Infrastructure.Handlers.Movies
     public class ReturnMovieHandler : ICommandHandler<ReturnMovie>
     {
         private readonly IMovieService _movieService;
+        private readonly IFluentHandler _fluentHandler;
 
-        public ReturnMovieHandler(IMovieService movieService)
+        public ReturnMovieHandler(IMovieService movieService, IFluentHandler fluentHandler)
         {
             _movieService = movieService;
+            _fluentHandler = fluentHandler;
         }
 
         public async Task HandleAsync(ReturnMovie command)
-        {
-            await _movieService.ReturnAsync(command.Id, command.UserId);
-        }
+            => await _fluentHandler
+                .Run(async () => await _movieService.ReturnAsync(command.Id, command.UserId))
+                .ExecuteAsync();
     }
 }

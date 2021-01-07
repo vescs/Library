@@ -11,15 +11,17 @@ namespace Library.Infrastructure.Handlers.Movies
     public class LendMovieHandler : ICommandHandler<LendMovie>
     {
         private readonly IMovieService _movieService;
+        private readonly IFluentHandler _fluentHandler;
 
-        public LendMovieHandler(IMovieService movieService)
+        public LendMovieHandler(IMovieService movieService, IFluentHandler fluentHandler)
         {
             _movieService = movieService;
+            _fluentHandler = fluentHandler;
         }
 
         public async Task HandleAsync(LendMovie command)
-        {
-            await _movieService.LendAsync(command.Id, command.UserId);
-        }
+            => await _fluentHandler
+                .Run(async () => await _movieService.LendAsync(command.Id, command.UserId))
+                .ExecuteAsync();
     }
 }

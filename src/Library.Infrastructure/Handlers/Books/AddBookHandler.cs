@@ -11,13 +11,17 @@ namespace Library.Infrastructure.Handlers.Books
     public class AddBookHandler : ICommandHandler<AddBook>
     {
         private readonly IBookService _bookService;
-        public AddBookHandler(IBookService bookService)
+        private readonly IFluentHandler _fluentHandler;
+
+        public AddBookHandler(IBookService bookService, IFluentHandler fluentHandler)
         {
             _bookService = bookService;
+            _fluentHandler = fluentHandler;
         }
+
         public async Task HandleAsync(AddBook command)
-        {
-            await _bookService.IncreaseQuantityAsync(command.Id, command.Quantity);
-        }
+            => await _fluentHandler
+                .Run(async () => await _bookService.IncreaseQuantityAsync(command.Id, command.Quantity))
+                .ExecuteAsync();
     }
 }

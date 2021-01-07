@@ -11,13 +11,17 @@ namespace Library.Infrastructure.Handlers.Books
     public class ReturnBookHandler : ICommandHandler<ReturnBook>
     {
         private readonly IBookService _bookService;
-        public ReturnBookHandler(IBookService bookService)
+        private readonly IFluentHandler _fluentHandler;
+
+        public ReturnBookHandler(IBookService bookService, IFluentHandler fluentHandler)
         {
             _bookService = bookService;
+            _fluentHandler = fluentHandler;
         }
+
         public async Task HandleAsync(ReturnBook command)
-        {
-            await _bookService.ReturnAsync(command.Id, command.UserId);
-        }
+            => await _fluentHandler
+                .Run(async () => await _bookService.ReturnAsync(command.Id, command.UserId))
+                .ExecuteAsync();
     }
 }

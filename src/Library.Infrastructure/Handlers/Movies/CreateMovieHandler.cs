@@ -11,18 +11,22 @@ namespace Library.Infrastructure.Handlers.Movies
     public class CreateMovieHandler : ICommandHandler<CreateMovie>
     {
         private readonly IMovieService _movieService;
+        private readonly IFluentHandler _fluentHandler;
 
-        public CreateMovieHandler(IMovieService movieService)
+        public CreateMovieHandler(IMovieService movieService, IFluentHandler fluentHandler)
         {
             _movieService = movieService;
+            _fluentHandler = fluentHandler;
         }
 
         public async Task HandleAsync(CreateMovie command)
-        {
-            command.Id = Guid.NewGuid();
-            await _movieService.CreateAsync(command.Id, command.Title, command.Description, command.Director,
-                command.Length, command.Quantity, command.PremiereDate);
-
-        }
+            => await _fluentHandler
+                .Run(async () =>
+                {
+                    command.Id = Guid.NewGuid();
+                    await _movieService.CreateAsync(command.Id, command.Title, command.Description, command.Director,
+                        command.Length, command.Quantity, command.PremiereDate);
+                })
+                .ExecuteAsync();
     }
 }

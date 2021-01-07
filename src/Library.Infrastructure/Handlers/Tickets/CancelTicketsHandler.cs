@@ -11,15 +11,17 @@ namespace Library.Infrastructure.Handlers.Tickets
     public class CancelTicketsHandler : ICommandHandler<CancelTickets>
     {
         private readonly ITicketService _ticketService;
+        private readonly IFluentHandler _fluentHandler;
 
-        public CancelTicketsHandler(ITicketService ticketService)
+        public CancelTicketsHandler(ITicketService ticketService, IFluentHandler fluentHandler)
         {
             _ticketService = ticketService;
+            _fluentHandler = fluentHandler;
         }
 
         public async Task HandleAsync(CancelTickets command)
-        {
-            await _ticketService.CancelAsync(command.UserId, command.EventId, command.Amount, command.Seat);
-        }
+            => await _fluentHandler
+                .Run(async () => await _ticketService.CancelAsync(command.UserId, command.EventId, command.Amount, command.Seat))
+                .ExecuteAsync();
     }
 }
