@@ -1,0 +1,18 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "seed": {
+    "flag": false
+  },
+  "jwt": {
+    "key": "Super secret key 12345 !",
+    "issuer": "http://localhost:62258",
+    "expiryMinutes": 60
+  },
+  "AllowedHosts": "*"
+}
