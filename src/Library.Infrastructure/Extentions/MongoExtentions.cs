@@ -14,7 +14,7 @@ namespace Library.Infrastructure.Extentions
             var mongoSettings = new MongoSettings();
             configuration.GetSection("mongo").Bind(mongoSettings);
             var mongoClient = new MongoClient(mongoSettings.ConnectionString);
-            return mongoClient.GetDatabase("Library");
+            return mongoClient.GetDatabase(mongoSettings.Database);
         }
     }
 }

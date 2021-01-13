@@ -29,7 +29,7 @@ namespace Library.Api
                                 .SetBasePath(env.ContentRootPath)
                                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                                .AddJsonFile($"appsettings.Test.json", optional: true)
+                                //.AddJsonFile($"appsettings.test.json", optional: true)
                                 .AddEnvironmentVariables();
             Configuration = builder.Build();
         }

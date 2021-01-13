@@ -29,7 +29,7 @@ namespace Library.Infrastructure.Services
             List<Task> tasks = new List<Task>();
             tasks.Add(_userService.RegisterAsync(Guid.NewGuid(), "user@dx.com", "Name", "string", "FirstName", "LastName"));
             tasks.Add(_userService.RegisterAsync(Guid.NewGuid(), "admin@dx.com", "Name", "string", "FirstName", "LastName", "admin"));
-            for (int i = 0; i < 60; i++)
+            for (int i = 1; i <= 5; i++)
             {
                 Guid id = Guid.NewGuid();
                 await _eventService.CreateAsync(id, $"Name {i}", $"Description {i}",
